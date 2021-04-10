@@ -17,3 +17,17 @@ The goal of this repository is to
 * SQL migration scripts for postgres but can be migrated to any SQL DB
 * Flyway Migration
 
+## Start Backend
+
+Start database container:
+
+* ```cd backend```
+* ```docker-compose .```
+
+Access postgres admin running at http://localhost:8090/ with password "admin":
+
+* click "Add New Server"
+* Tab "Connection"
+* host: postgres
+* port: 5432
+* password: changeme
