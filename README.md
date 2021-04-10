@@ -7,4 +7,13 @@ The goal of this repository is to
 
 * use the latest and up to date libraries for JWT token generation
 * write as little code as possible to accomplish the task
-* use as 100% security API of spring auth instead of writing own code
+* use 100% of the security API provided by spring instead of writing own code
+
+## Backend Technology Stack
+
+* Spring Security
+* Spring Web with REST API for user authentication
+* Spring Data JPA for User persistence
+* SQL migration scripts for postgres but can be migrated to any SQL DB
+* Flyway Migration
+
