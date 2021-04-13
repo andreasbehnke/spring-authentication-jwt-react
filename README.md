@@ -36,6 +36,7 @@ Access postgres admin running at http://localhost:8090/ with password "admin":
 
 * React
 * Typescript
+* material-ui
 
 ### Start Web Frontend
 
