@@ -17,7 +17,7 @@ The goal of this repository is to
 * SQL migration scripts for postgres but can be migrated to any SQL DB
 * Flyway Migration
 
-## Start Backend
+### Start Backend
 
 Start database container:
 
@@ -31,3 +31,20 @@ Access postgres admin running at http://localhost:8090/ with password "admin":
 * host: postgres
 * port: 5432
 * password: changeme
+
+## Web Frontend Techonoly Stack
+
+* React
+* Typescript
+
+### Start Web Frontend
+
+* ```cd frontend```
+* ```npm start```
+
+### Build Web Frontend
+
+* ```npm run build```
+  
+Builds the app for production to the build folder.
+It correctly bundles React in production mode and optimizes the build for the best performance.
