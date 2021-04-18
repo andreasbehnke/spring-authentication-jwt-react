@@ -9,6 +9,16 @@ The goal of this repository is to
 * write as little code as possible to accomplish the task
 * use 100% of the security API provided by spring instead of writing own code
 
+## Usage of this building block
+
+You can use this code for free in your code regarding the requirements
+of the apache licence 2.0 .
+
+**Warning**:
+
+* The code is demonstrating the correct usage of user based authentication with spring and react only, it does not include all other hardening required to run a secure application in production.   
+* Don't use the flyway SQL scripts directly, make sure your app db user is different from the flyway user with reduced permissions!
+
 ## Backend Technology Stack
 
 * Spring Security
@@ -22,7 +32,7 @@ The goal of this repository is to
 Start database container:
 
 * ```cd backend```
-* ```docker-compose .```
+* ```docker-compose start```
 
 Access postgres admin running at http://localhost:8090/ with password "admin":
 
@@ -31,6 +41,10 @@ Access postgres admin running at http://localhost:8090/ with password "admin":
 * host: postgres
 * port: 5432
 * password: changeme
+
+Start backend app:
+
+* ```./mvnw spring-boot:run```
 
 ## Web Frontend Techonoly Stack
 
