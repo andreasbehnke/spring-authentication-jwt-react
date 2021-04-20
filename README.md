@@ -1,6 +1,6 @@
 # Spring Authentication with JWT, REST API and React Frontend
 Building block for a web application authentication using 
-JWT cookie, spring security and react in the frontend. 
+JWT cookie, spring security, stateless REST backend and react in the frontend. 
 Fork or copy this code for your own web application.
 
 The goal of this repository is to
