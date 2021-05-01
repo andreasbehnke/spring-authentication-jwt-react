@@ -1,21 +1,29 @@
 package org.buildingblock.springauthjwt;
 
+import org.buildingblock.springauthjwt.filter.JwtTokenAuthenticationFilter;
 import org.buildingblock.springauthjwt.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
 
-    public SecurityConfig(UserService userService) {
+    private final JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
+
+    public SecurityConfig(UserService userService, JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter) {
         this.userService = userService;
+        this.jwtTokenAuthenticationFilter = jwtTokenAuthenticationFilter;
     }
 
     @Override
@@ -30,6 +38,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
+        // Enable CORS and disable CSRF
+        http = http.cors().and().csrf().disable();
+
+        // Set session management to stateless
+        http = http
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and();
+
+        // Set unauthorized requests exception handler
+        http = http
+                .exceptionHandling()
+                .authenticationEntryPoint(
+                        (request, response, ex) -> response.sendError(
+                                HttpServletResponse.SC_UNAUTHORIZED,
+                                ex.getMessage()
+                        )
+                )
+                .and();
+
+        // Set permissions on endpoints
+        http.authorizeRequests()
+                // public endpoints
+                .antMatchers("/public/**").permitAll()
+                // private endpoints
+                .anyRequest().authenticated();
+
+        // Add JWT token filter
+        http.addFilterBefore(
+                jwtTokenAuthenticationFilter,
+                UsernamePasswordAuthenticationFilter.class
+        );
     }
 }
