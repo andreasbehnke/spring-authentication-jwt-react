@@ -1,7 +1,7 @@
 CREATE TABLE "user" (
     id uuid not null,
     email varchar not null,
-    hashedPassword varchar not null,
+    hashed_password varchar not null,
     enabled bool not null,
 
     constraint pk_user primary key (id),
