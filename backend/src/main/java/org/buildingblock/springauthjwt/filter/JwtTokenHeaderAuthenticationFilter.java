@@ -22,13 +22,13 @@ import static org.springframework.util.StringUtils.hasText;
 import static org.springframework.util.StringUtils.split;
 
 @Component
-public class JwtTokenAuthenticationFilter extends OncePerRequestFilter {
+public class JwtTokenHeaderAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenService jwtTokenService;
 
     private final UserService userService;
 
-    public JwtTokenAuthenticationFilter(JwtTokenService jwtTokenService, UserService userService) {
+    public JwtTokenHeaderAuthenticationFilter(JwtTokenService jwtTokenService, UserService userService) {
         this.jwtTokenService = jwtTokenService;
         this.userService = userService;
     }

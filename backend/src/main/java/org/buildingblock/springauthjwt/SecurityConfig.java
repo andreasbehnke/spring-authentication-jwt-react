@@ -1,6 +1,6 @@
 package org.buildingblock.springauthjwt;
 
-import org.buildingblock.springauthjwt.filter.JwtTokenAuthenticationFilter;
+import org.buildingblock.springauthjwt.filter.JwtTokenHeaderAuthenticationFilter;
 import org.buildingblock.springauthjwt.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,11 +20,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserService userService;
 
-    private final JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter;
+    private final JwtTokenHeaderAuthenticationFilter jwtTokenHeaderAuthenticationFilter;
 
-    public SecurityConfig(UserService userService, JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter) {
+    public SecurityConfig(UserService userService, JwtTokenHeaderAuthenticationFilter jwtTokenHeaderAuthenticationFilter) {
         this.userService = userService;
-        this.jwtTokenAuthenticationFilter = jwtTokenAuthenticationFilter;
+        this.jwtTokenHeaderAuthenticationFilter = jwtTokenHeaderAuthenticationFilter;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Add JWT token filter
         http.addFilterBefore(
-                jwtTokenAuthenticationFilter,
+                jwtTokenHeaderAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class
         );
     }
