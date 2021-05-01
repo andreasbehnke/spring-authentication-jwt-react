@@ -1,7 +1,5 @@
 package org.buildingblock.springauthjwt.model;
 
-import org.buildingblock.springauthjwt.entities.User;
-
 import java.util.UUID;
 
 public class UserView {
@@ -13,5 +11,13 @@ public class UserView {
     public UserView(UserAuthenticationDetails userAuthenticationDetails) {
         this.id = userAuthenticationDetails.getId();
         this.email = userAuthenticationDetails.getUsername();
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

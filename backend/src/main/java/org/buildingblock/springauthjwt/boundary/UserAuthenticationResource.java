@@ -8,6 +8,7 @@ import org.buildingblock.springauthjwt.service.JwtTokenService;
 import org.slf4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -44,7 +45,8 @@ public class UserAuthenticationResource {
             UserAuthenticationDetails authDetails = (UserAuthenticationDetails) authentication.getPrincipal();
             String token = jwtTokenService.generateAccessToken(new JwtDetails(authDetails.getId()));
             return ResponseEntity.ok()
-                    .header(HttpHeaders.AUTHORIZATION, token)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                     .body(new UserView(authDetails));
         } catch (BadCredentialsException ex) {
             logger.warn("Bad credentials provided by user");
