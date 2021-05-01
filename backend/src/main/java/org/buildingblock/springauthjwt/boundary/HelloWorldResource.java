@@ -1,4 +1,4 @@
-package org.buildingblock.springauthjwt;
+package org.buildingblock.springauthjwt.boundary;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
