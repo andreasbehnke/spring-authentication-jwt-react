@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.Date;
-import java.util.UUID;
 
 /**
  * Provides methods for generating and validating JSON Web Tokens.
