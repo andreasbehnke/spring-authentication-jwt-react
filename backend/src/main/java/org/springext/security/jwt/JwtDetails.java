@@ -1,6 +1,4 @@
-package org.buildingblock.springauthjwt.model;
-
-import java.util.UUID;
+package org.springext.security.jwt;
 
 /**
  * Holds all information about a valid JSON Web Token.

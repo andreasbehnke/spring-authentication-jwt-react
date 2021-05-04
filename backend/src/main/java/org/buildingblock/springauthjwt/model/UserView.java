@@ -1,6 +1,6 @@
 package org.buildingblock.springauthjwt.model;
 
-import org.buildingblock.springauthjwt.service.UserAuthenticationDetails;
+import org.springext.security.jwt.UserAuthenticationDetails;
 
 import java.util.UUID;
 

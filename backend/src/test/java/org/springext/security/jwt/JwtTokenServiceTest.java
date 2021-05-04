@@ -1,6 +1,5 @@
-package org.buildingblock.springauthjwt.service;
+package org.springext.security.jwt;
 
-import org.buildingblock.springauthjwt.model.JwtDetails;
 import org.junit.jupiter.api.Test;
 import org.slf4j.helpers.NOPLogger;
 

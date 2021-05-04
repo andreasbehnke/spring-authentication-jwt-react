@@ -1,8 +1,5 @@
-package org.buildingblock.springauthjwt.filter;
+package org.springext.security.jwt;
 
-import org.buildingblock.springauthjwt.model.JwtDetails;
-import org.buildingblock.springauthjwt.service.JwtTokenService;
-import org.buildingblock.springauthjwt.service.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,9 +23,9 @@ public class JwtTokenHeaderAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenService jwtTokenService;
 
-    private final UserService userService;
+    private final UserAuthenticationDetailsService userService;
 
-    public JwtTokenHeaderAuthenticationFilter(JwtTokenService jwtTokenService, UserService userService) {
+    public JwtTokenHeaderAuthenticationFilter(JwtTokenService jwtTokenService, UserAuthenticationDetailsService userService) {
         this.jwtTokenService = jwtTokenService;
         this.userService = userService;
     }

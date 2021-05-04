@@ -1,6 +1,6 @@
 package org.buildingblock.springauthjwt;
 
-import org.buildingblock.springauthjwt.filter.JwtTokenHeaderAuthenticationFilter;
+import org.springext.security.jwt.JwtTokenHeaderAuthenticationFilter;
 import org.buildingblock.springauthjwt.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;

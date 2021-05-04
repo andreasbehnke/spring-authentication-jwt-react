@@ -2,7 +2,7 @@ package org.buildingblock.springauthjwt.boundary;
 
 import org.buildingblock.springauthjwt.model.UserAuthenticationRequestImpl;
 import org.buildingblock.springauthjwt.model.UserView;
-import org.buildingblock.springauthjwt.service.UserAuthenticationService;
+import org.springext.security.jwt.UserAuthenticationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

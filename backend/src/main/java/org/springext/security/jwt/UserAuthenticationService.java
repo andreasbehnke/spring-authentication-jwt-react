@@ -1,6 +1,5 @@
-package org.buildingblock.springauthjwt.service;
+package org.springext.security.jwt;
 
-import org.buildingblock.springauthjwt.model.JwtDetails;
 import org.slf4j.Logger;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

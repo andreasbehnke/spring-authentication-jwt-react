@@ -1,4 +1,4 @@
-package org.buildingblock.springauthjwt.service;
+package org.springext.security.jwt;
 
 public interface UserAuthenticationRequest {
 

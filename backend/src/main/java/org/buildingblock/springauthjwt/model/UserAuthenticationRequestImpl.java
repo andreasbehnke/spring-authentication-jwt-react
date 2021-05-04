@@ -1,6 +1,6 @@
 package org.buildingblock.springauthjwt.model;
 
-import org.buildingblock.springauthjwt.service.UserAuthenticationRequest;
+import org.springext.security.jwt.UserAuthenticationRequest;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;

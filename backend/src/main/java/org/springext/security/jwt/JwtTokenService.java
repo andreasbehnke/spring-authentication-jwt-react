@@ -1,7 +1,6 @@
-package org.buildingblock.springauthjwt.service;
+package org.springext.security.jwt;
 
 import io.jsonwebtoken.*;
-import org.buildingblock.springauthjwt.model.JwtDetails;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
