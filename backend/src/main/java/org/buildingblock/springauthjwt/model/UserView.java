@@ -8,7 +8,7 @@ public class UserView {
 
     private final String email;
 
-    public UserView(UserAuthenticationDetails userAuthenticationDetails) {
+    public UserView(UserAuthenticationDetailsImpl userAuthenticationDetails) {
         this.id = UUID.fromString(userAuthenticationDetails.getUserKey());
         this.email = userAuthenticationDetails.getUsername();
     }

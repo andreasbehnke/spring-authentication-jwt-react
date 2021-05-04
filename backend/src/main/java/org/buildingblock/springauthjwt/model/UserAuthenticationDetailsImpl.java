@@ -1,19 +1,20 @@
 package org.buildingblock.springauthjwt.model;
 
 import org.buildingblock.springauthjwt.entities.User;
+import org.buildingblock.springauthjwt.service.UserAuthenticationDetails;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
-public class UserAuthenticationDetails implements UserDetails {
+public class UserAuthenticationDetailsImpl implements UserAuthenticationDetails {
 
     private final User user;
 
-    public UserAuthenticationDetails(User user) {
+    public UserAuthenticationDetailsImpl(User user) {
         this.user = user;
     }
 
+    @Override
     public String getUserKey() {
         return user.getId().toString();
     }

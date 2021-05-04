@@ -1,7 +1,7 @@
 package org.buildingblock.springauthjwt.boundary;
 
 import org.buildingblock.springauthjwt.model.JwtDetails;
-import org.buildingblock.springauthjwt.model.UserAuthenticationDetails;
+import org.buildingblock.springauthjwt.model.UserAuthenticationDetailsImpl;
 import org.buildingblock.springauthjwt.model.UserAuthenticationRequest;
 import org.buildingblock.springauthjwt.model.UserView;
 import org.buildingblock.springauthjwt.service.JwtTokenService;
@@ -42,7 +42,7 @@ public class UserAuthenticationResource {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-            UserAuthenticationDetails authDetails = (UserAuthenticationDetails) authentication.getPrincipal();
+            UserAuthenticationDetailsImpl authDetails = (UserAuthenticationDetailsImpl) authentication.getPrincipal();
             String token = jwtTokenService.generateAccessToken(new JwtDetails(authDetails.getUserKey()));
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
