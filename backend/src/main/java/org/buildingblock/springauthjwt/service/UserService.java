@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class UserService implements UserAuthenticationDetailsService<UserAuthenticationDetails, UUID> {
+public class UserService implements UserAuthenticationDetailsService<UserAuthenticationDetails> {
 
     private final UserRepository userRepository;
 
@@ -24,8 +24,8 @@ public class UserService implements UserAuthenticationDetailsService<UserAuthent
     }
 
     @Override
-    public UserAuthenticationDetails loadUserById(UUID id) {
-        return userRepository.findById(id).map(UserAuthenticationDetails::new).orElse(null);
+    public UserAuthenticationDetails loadUserByKey(String userKey) {
+        return userRepository.findById(UUID.fromString(userKey)).map(UserAuthenticationDetails::new).orElse(null);
     }
 
     @Override

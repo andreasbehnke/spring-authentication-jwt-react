@@ -5,7 +5,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.UUID;
 
 public class UserAuthenticationDetails implements UserDetails {
 
@@ -15,8 +14,8 @@ public class UserAuthenticationDetails implements UserDetails {
         this.user = user;
     }
 
-    public UUID getId() {
-        return user.getId();
+    public String getUserKey() {
+        return user.getId().toString();
     }
 
     @Override

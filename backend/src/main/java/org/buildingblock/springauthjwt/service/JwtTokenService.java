@@ -39,7 +39,7 @@ public class JwtTokenService {
         try {
             Claims claims = Jwts.parser().setSigningKey(jwtSigningKey)
                     .parseClaimsJws(token).getBody();
-            return new JwtDetails(UUID.fromString(claims.getSubject()));
+            return new JwtDetails(claims.getSubject());
         } catch (SignatureException ex) {
             logger.error("Invalid JWT signature - {}", ex.getMessage());
         } catch (MalformedJwtException ex) {
@@ -57,7 +57,7 @@ public class JwtTokenService {
     public String generateAccessToken(JwtDetails details) {
         Assert.notNull(details, "Parameter details must not be null");
         return Jwts.builder()
-                .setSubject(details.getUserId().toString())
+                .setSubject(details.getUserKey())
                 .setIssuer(jwtIssuer)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationTimeInSeconds * 1000))

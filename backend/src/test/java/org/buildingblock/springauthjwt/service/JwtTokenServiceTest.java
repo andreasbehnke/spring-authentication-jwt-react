@@ -12,25 +12,25 @@ public class JwtTokenServiceTest {
 
     @Test
     public void testGenerateToken() {
-        UUID userId = UUID.randomUUID();
+        String userId = UUID.randomUUID().toString();
         JwtTokenService jwtTokenService = new JwtTokenService("abcde", 60, "example.com", NOPLogger.NOP_LOGGER);
         String token = jwtTokenService.generateAccessToken(new JwtDetails(userId));
         JwtDetails details = jwtTokenService.getTokenDetails(token);
         assertNotNull(details);
-        assertEquals(userId, details.getUserId());
+        assertEquals(userId, details.getUserKey());
     }
 
     @Test
     public void testExpirationDate() {
         JwtTokenService jwtTokenService = new JwtTokenService("abcde", 0, "example.com", NOPLogger.NOP_LOGGER);
-        String token = jwtTokenService.generateAccessToken(new JwtDetails(UUID.randomUUID()));
+        String token = jwtTokenService.generateAccessToken(new JwtDetails(UUID.randomUUID().toString()));
         assertNull(jwtTokenService.getTokenDetails(token));
     }
 
     @Test
     public void testWrongSigningKeyDate() {
         JwtTokenService jwtTokenService = new JwtTokenService("abcde", 60, "example.com", NOPLogger.NOP_LOGGER);
-        String token = jwtTokenService.generateAccessToken(new JwtDetails(UUID.randomUUID()));
+        String token = jwtTokenService.generateAccessToken(new JwtDetails(UUID.randomUUID().toString()));
         jwtTokenService = new JwtTokenService("edcba", 60, "example.com", NOPLogger.NOP_LOGGER);
         assertNull(jwtTokenService.getTokenDetails(token));
     }

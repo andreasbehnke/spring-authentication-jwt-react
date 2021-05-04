@@ -53,7 +53,7 @@ public class JwtTokenHeaderAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        UserDetails userDetails = userService.loadUserById(jwtDetails.getUserId());
+        UserDetails userDetails = userService.loadUserByKey(jwtDetails.getUserKey());
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(
                         userDetails,

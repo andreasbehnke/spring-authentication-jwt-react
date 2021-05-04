@@ -7,13 +7,13 @@ import java.util.UUID;
  */
 public class JwtDetails {
 
-    private final UUID userId;
+    private final String userKey;
 
-    public JwtDetails(UUID userId) {
-        this.userId = userId;
+    public JwtDetails(String userKey) {
+        this.userKey = userKey;
     }
 
-    public UUID getUserId() {
-        return userId;
+    public String getUserKey() {
+        return userKey;
     }
 }

@@ -43,7 +43,7 @@ public class UserAuthenticationResource {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
             UserAuthenticationDetails authDetails = (UserAuthenticationDetails) authentication.getPrincipal();
-            String token = jwtTokenService.generateAccessToken(new JwtDetails(authDetails.getId()));
+            String token = jwtTokenService.generateAccessToken(new JwtDetails(authDetails.getUserKey()));
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)

@@ -9,7 +9,7 @@ public class UserView {
     private final String email;
 
     public UserView(UserAuthenticationDetails userAuthenticationDetails) {
-        this.id = userAuthenticationDetails.getId();
+        this.id = UUID.fromString(userAuthenticationDetails.getUserKey());
         this.email = userAuthenticationDetails.getUsername();
     }
 
