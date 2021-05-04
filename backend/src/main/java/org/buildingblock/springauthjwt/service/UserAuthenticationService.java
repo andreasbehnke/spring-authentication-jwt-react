@@ -29,16 +29,16 @@ public class UserAuthenticationService {
         this.logger = logger;
     }
 
-    public <V> ResponseEntity<V> authenticateUser(Object principal, Object credentials, Function<UserAuthenticationDetails, V> mapToUserView) {
+    public <V> ResponseEntity<V> authenticateUser(UserAuthenticationRequest request, Function<UserAuthenticationDetails, V> mapToResponse) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(principal, credentials));
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             UserAuthenticationDetails authDetails = (UserAuthenticationDetails) authentication.getPrincipal();
             String token = jwtTokenService.generateAccessToken(new JwtDetails(authDetails.getUserKey()));
             return ResponseEntity.ok()
                     .contentType(MediaType.APPLICATION_JSON)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
-                    .body(mapToUserView.apply(authDetails));
+                    .body(mapToResponse.apply(authDetails));
         } catch (BadCredentialsException ex) {
             logger.warn("Bad credentials provided by user");
         } catch (Exception ex) {

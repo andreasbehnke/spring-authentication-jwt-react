@@ -1,6 +1,6 @@
 package org.buildingblock.springauthjwt.boundary;
 
-import org.buildingblock.springauthjwt.model.UserAuthenticationRequest;
+import org.buildingblock.springauthjwt.model.UserAuthenticationRequestImpl;
 import org.buildingblock.springauthjwt.model.UserView;
 import org.buildingblock.springauthjwt.service.UserAuthenticationService;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +22,7 @@ public class UserAuthenticationResource {
     }
 
     @PostMapping("login")
-    public ResponseEntity<UserView> login(@RequestBody @Valid UserAuthenticationRequest request) {
-        return userAuthenticationService.authenticateUser(
-                request.getEmail(),
-                request.getPassword(),
-                authenticationDetails -> new UserView(authenticationDetails));
+    public ResponseEntity<UserView> login(@RequestBody @Valid UserAuthenticationRequestImpl request) {
+        return userAuthenticationService.authenticateUser(request, UserView::new);
     }
 }

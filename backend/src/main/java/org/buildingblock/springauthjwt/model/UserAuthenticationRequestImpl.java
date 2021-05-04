@@ -1,9 +1,11 @@
 package org.buildingblock.springauthjwt.model;
 
+import org.buildingblock.springauthjwt.service.UserAuthenticationRequest;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
-public class UserAuthenticationRequest {
+public class UserAuthenticationRequestImpl implements UserAuthenticationRequest {
 
     @NotNull
     @Email
@@ -20,11 +22,17 @@ public class UserAuthenticationRequest {
         this.email = email;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 }
