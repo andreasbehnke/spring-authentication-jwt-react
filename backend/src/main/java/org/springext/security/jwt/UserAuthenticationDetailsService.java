@@ -7,7 +7,7 @@ public interface UserAuthenticationDetailsService<U extends UserAuthenticationDe
 
     U loadUserByUsername(String username) throws UsernameNotFoundException;
 
-    U loadUserByKey(String userKey);
+    U loadUserByKey(String userKey) throws UsernameNotFoundException;
 
     U getAuthorizedUser();
 }
