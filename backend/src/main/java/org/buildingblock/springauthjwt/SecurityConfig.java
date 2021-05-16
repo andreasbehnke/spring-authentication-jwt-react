@@ -1,7 +1,9 @@
 package org.buildingblock.springauthjwt;
 
-import org.springext.security.jwt.JwtTokenHeaderAuthenticationFilter;
 import org.buildingblock.springauthjwt.service.UserService;
+import org.springext.security.jwt.JwtAuthenticationProvider;
+import org.springext.security.jwt.JwtTokenHeaderAuthenticationFilter;
+import org.springext.security.jwt.JwtTokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,23 +14,30 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
 
 import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final JwtTokenService jwtTokenService;
+
     private final UserService userService;
 
-    private final JwtTokenHeaderAuthenticationFilter jwtTokenHeaderAuthenticationFilter;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
-    public SecurityConfig(UserService userService, JwtTokenHeaderAuthenticationFilter jwtTokenHeaderAuthenticationFilter) {
+    public SecurityConfig(JwtTokenService jwtTokenService, UserService userService, JwtAuthenticationProvider jwtAuthenticationProvider) {
+        this.jwtTokenService = jwtTokenService;
         this.userService = userService;
-        this.jwtTokenHeaderAuthenticationFilter = jwtTokenHeaderAuthenticationFilter;
+        this.jwtAuthenticationProvider = jwtAuthenticationProvider;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(jwtAuthenticationProvider);
         auth.userDetailsService(userService);
     }
 
@@ -45,6 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //http.authenticationProvider(jwtAuthenticationProvider);
+
         // Enable CORS and disable CSRF
         http = http.cors().and().csrf().disable();
 
@@ -68,12 +79,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // Set permissions on endpoints
         http.authorizeRequests()
                 // public endpoints
-                .antMatchers("/public/**").permitAll()
+                .antMatchers("/public/**", "/error").permitAll()
                 // private endpoints
                 .anyRequest().authenticated();
 
         // Add JWT token filter
-        http.addFilterBefore(
+        JwtTokenHeaderAuthenticationFilter jwtTokenHeaderAuthenticationFilter =
+                new JwtTokenHeaderAuthenticationFilter(
+                        new NegatedRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/public/**"), new AntPathRequestMatcher("/error"))),
+                        jwtTokenService,
+                        userService,
+                        authenticationManagerBean());
+        http.addFilterAt(
                 jwtTokenHeaderAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class
         );

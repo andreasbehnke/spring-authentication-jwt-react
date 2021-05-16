@@ -1,63 +1,57 @@
 package org.springext.security.jwt;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
 
-import static org.springframework.util.StringUtils.hasText;
-import static org.springframework.util.StringUtils.split;
-
-@Component
-public class JwtTokenHeaderAuthenticationFilter extends OncePerRequestFilter {
+public class JwtTokenHeaderAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private final JwtTokenService jwtTokenService;
 
     private final UserAuthenticationDetailsService userService;
 
-    public JwtTokenHeaderAuthenticationFilter(JwtTokenService jwtTokenService, UserAuthenticationDetailsService userService) {
+    public JwtTokenHeaderAuthenticationFilter(
+            RequestMatcher requiresAuthenticationRequestMatcher,
+            JwtTokenService jwtTokenService,
+            UserAuthenticationDetailsService userService,
+            AuthenticationManager authenticationManager) {
+        super(requiresAuthenticationRequestMatcher);
         this.jwtTokenService = jwtTokenService;
         this.userService = userService;
+        setAuthenticationManager(authenticationManager);
     }
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain)
-            throws ServletException, IOException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (!hasText(header) || !header.startsWith("Bearer ")) {
-            // if header is missing or not correct
-            filterChain.doFilter(request, response);
-            return;
+        if (!StringUtils.hasText(header) || !header.startsWith("Bearer ")) {
+            throw new BadCredentialsException("JWT header or cookie is missing");
         }
 
-        String token =  split(header, " ")[1];
+        String token =  StringUtils.split(header, " ")[1];
         JwtDetails jwtDetails = jwtTokenService.getTokenDetails(token);
         if (jwtDetails == null) {
-            // could not extract jwt details
-            filterChain.doFilter(request, response);
-            return;
+            throw new BadCredentialsException("JWT token could not be parsed");
         }
-        UserDetails userDetails = userService.loadUserByKey(jwtDetails.getUserKey());
-        UsernamePasswordAuthenticationToken authentication =
-                new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails == null ? Collections.EMPTY_LIST : userDetails.getAuthorities());
-        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        filterChain.doFilter(request, response);
+        return getAuthenticationManager().authenticate(new JwtAuthenticationToken(jwtDetails));
+    }
+
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        SecurityContextHolder.getContext().setAuthentication(authResult);
+        // delegate filter processing to servlet filter chain after successful authentication
+        chain.doFilter(request, response);
     }
 }
