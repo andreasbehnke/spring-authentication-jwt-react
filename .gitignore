@@ -1,2 +1,6 @@
 .idea
 *.iml
+/backend/.project
+/backend/bin/*
+/backend/.settings/*
+/backend/.classpath
