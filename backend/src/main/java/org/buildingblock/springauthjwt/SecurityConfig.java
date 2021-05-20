@@ -88,7 +88,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 new JwtTokenHeaderAuthenticationFilter(
                         new NegatedRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/public/**"), new AntPathRequestMatcher("/error"))),
                         jwtTokenService,
-                        userService,
                         authenticationManagerBean());
         http.addFilterAt(
                 jwtTokenHeaderAuthenticationFilter,

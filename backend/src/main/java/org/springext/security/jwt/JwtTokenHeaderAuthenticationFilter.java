@@ -20,21 +20,17 @@ public class JwtTokenHeaderAuthenticationFilter extends AbstractAuthenticationPr
 
     private final JwtTokenService jwtTokenService;
 
-    private final UserAuthenticationDetailsService userService;
-
     public JwtTokenHeaderAuthenticationFilter(
             RequestMatcher requiresAuthenticationRequestMatcher,
             JwtTokenService jwtTokenService,
-            UserAuthenticationDetailsService userService,
             AuthenticationManager authenticationManager) {
         super(requiresAuthenticationRequestMatcher);
         this.jwtTokenService = jwtTokenService;
-        this.userService = userService;
         setAuthenticationManager(authenticationManager);
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (!StringUtils.hasText(header) || !header.startsWith("Bearer ")) {
             throw new BadCredentialsException("JWT header or cookie is missing");
