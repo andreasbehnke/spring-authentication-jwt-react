@@ -4,6 +4,7 @@ import org.buildingblock.springauthjwt.service.UserService;
 import org.springext.security.jwt.JwtAuthenticationProvider;
 import org.springext.security.jwt.JwtTokenHeaderAuthenticationFilter;
 import org.springext.security.jwt.JwtTokenService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -29,10 +30,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
-    public SecurityConfig(JwtTokenService jwtTokenService, UserService userService, JwtAuthenticationProvider jwtAuthenticationProvider) {
+    private final boolean autoRefreshToken;
+
+    public SecurityConfig(JwtTokenService jwtTokenService, UserService userService, JwtAuthenticationProvider jwtAuthenticationProvider,
+                          @Value("${authentication.jwt.autoRefreshToken}") boolean autoRefreshToken) {
         this.jwtTokenService = jwtTokenService;
         this.userService = userService;
         this.jwtAuthenticationProvider = jwtAuthenticationProvider;
+        this.autoRefreshToken = autoRefreshToken;
     }
 
     @Override
@@ -89,6 +94,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         new NegatedRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/public/**"), new AntPathRequestMatcher("/error"))),
                         jwtTokenService,
                         authenticationManagerBean());
+        jwtTokenHeaderAuthenticationFilter.setAutoRefreshToken(autoRefreshToken);
         http.addFilterAt(
                 jwtTokenHeaderAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class

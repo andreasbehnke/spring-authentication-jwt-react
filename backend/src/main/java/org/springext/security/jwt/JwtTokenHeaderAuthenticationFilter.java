@@ -20,6 +20,8 @@ public class JwtTokenHeaderAuthenticationFilter extends AbstractAuthenticationPr
 
     private final JwtTokenService jwtTokenService;
 
+    private boolean autoRefreshToken = false;
+
     public JwtTokenHeaderAuthenticationFilter(
             RequestMatcher requiresAuthenticationRequestMatcher,
             JwtTokenService jwtTokenService,
@@ -27,6 +29,10 @@ public class JwtTokenHeaderAuthenticationFilter extends AbstractAuthenticationPr
         super(requiresAuthenticationRequestMatcher);
         this.jwtTokenService = jwtTokenService;
         setAuthenticationManager(authenticationManager);
+    }
+
+    public void setAutoRefreshToken(boolean autoRefreshToken) {
+        this.autoRefreshToken = autoRefreshToken;
     }
 
     @Override
@@ -40,6 +46,11 @@ public class JwtTokenHeaderAuthenticationFilter extends AbstractAuthenticationPr
         JwtDetails jwtDetails = jwtTokenService.getTokenDetails(token);
         if (jwtDetails == null) {
             throw new BadCredentialsException("JWT token could not be parsed");
+        }
+        if (autoRefreshToken) {
+            // this will reset token expiration
+            String freshToken = jwtTokenService.generateAccessToken(jwtDetails);
+            response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + freshToken);
         }
         return getAuthenticationManager().authenticate(new JwtAuthenticationToken(jwtDetails));
     }
