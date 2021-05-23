@@ -3,9 +3,14 @@ package org.springext.security.jwt;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 
 /**
@@ -61,5 +66,25 @@ public class JwtTokenService {
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationTimeInSeconds * 1000))
                 .signWith(SignatureAlgorithm.HS512, jwtSigningKey)
                 .compact();
+    }
+
+    public JwtDetails getTokenDetailsFromHeader(HttpServletRequest request) {
+        final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (!StringUtils.hasText(header) || !header.startsWith("Bearer ")) {
+            throw new BadCredentialsException("JWT header or cookie is missing");
+        }
+
+        String token =  StringUtils.split(header, " ")[1];
+        JwtDetails jwtDetails = getTokenDetails(token);
+        if (jwtDetails == null) {
+            throw new BadCredentialsException("JWT token could not be parsed");
+        }
+        return jwtDetails;
+    }
+
+    public void setTokenToHeader(HttpServletResponse response, JwtDetails jwtDetails) {
+        // this will reset token expiration
+        String freshToken = generateAccessToken(jwtDetails);
+        response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + freshToken);
     }
 }
