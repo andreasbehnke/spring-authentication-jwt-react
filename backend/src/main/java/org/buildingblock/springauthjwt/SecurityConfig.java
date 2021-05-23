@@ -2,7 +2,7 @@ package org.buildingblock.springauthjwt;
 
 import org.buildingblock.springauthjwt.service.UserService;
 import org.springext.security.jwt.JwtAuthenticationProvider;
-import org.springext.security.jwt.JwtTokenHeaderAuthenticationFilter;
+import org.springext.security.jwt.JwtTokenAuthenticationFilter;
 import org.springext.security.jwt.JwtTokenService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -89,14 +89,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         // Add JWT token filter
-        JwtTokenHeaderAuthenticationFilter jwtTokenHeaderAuthenticationFilter =
-                new JwtTokenHeaderAuthenticationFilter(
+        JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter =
+                new JwtTokenAuthenticationFilter(
                         new NegatedRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/public/**"), new AntPathRequestMatcher("/error"))),
                         jwtTokenService,
                         authenticationManagerBean());
-        jwtTokenHeaderAuthenticationFilter.setAutoRefreshToken(autoRefreshToken);
+        jwtTokenAuthenticationFilter.setAutoRefreshToken(autoRefreshToken);
         http.addFilterAt(
-                jwtTokenHeaderAuthenticationFilter,
+                jwtTokenAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class
         );
     }

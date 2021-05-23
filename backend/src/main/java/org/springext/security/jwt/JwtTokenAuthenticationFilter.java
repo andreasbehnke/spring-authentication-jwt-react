@@ -16,13 +16,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class JwtTokenHeaderAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class JwtTokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
     private final JwtTokenService jwtTokenService;
 
     private boolean autoRefreshToken = false;
 
-    public JwtTokenHeaderAuthenticationFilter(
+    public JwtTokenAuthenticationFilter(
             RequestMatcher requiresAuthenticationRequestMatcher,
             JwtTokenService jwtTokenService,
             AuthenticationManager authenticationManager) {
