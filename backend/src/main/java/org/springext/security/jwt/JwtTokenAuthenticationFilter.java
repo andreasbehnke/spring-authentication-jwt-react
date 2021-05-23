@@ -35,8 +35,7 @@ public class JwtTokenAuthenticationFilter extends AbstractAuthenticationProcessi
         this.autoRefreshToken = autoRefreshToken;
     }
 
-    @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    private JwtDetails getTokenDetailsFromHeader(HttpServletRequest request) {
         final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (!StringUtils.hasText(header) || !header.startsWith("Bearer ")) {
             throw new BadCredentialsException("JWT header or cookie is missing");
@@ -47,10 +46,20 @@ public class JwtTokenAuthenticationFilter extends AbstractAuthenticationProcessi
         if (jwtDetails == null) {
             throw new BadCredentialsException("JWT token could not be parsed");
         }
+        return jwtDetails;
+    }
+
+    private void setTokenToHeader(HttpServletResponse response, JwtDetails jwtDetails) {
+        // this will reset token expiration
+        String freshToken = jwtTokenService.generateAccessToken(jwtDetails);
+        response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + freshToken);
+    }
+
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        JwtDetails jwtDetails = getTokenDetailsFromHeader(request);
         if (autoRefreshToken) {
-            // this will reset token expiration
-            String freshToken = jwtTokenService.generateAccessToken(jwtDetails);
-            response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + freshToken);
+            setTokenToHeader(response, jwtDetails);
         }
         return getAuthenticationManager().authenticate(new JwtAuthenticationToken(jwtDetails));
     }
