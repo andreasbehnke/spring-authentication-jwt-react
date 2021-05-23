@@ -4,6 +4,7 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -18,6 +19,8 @@ import java.util.Date;
  */
 @Component
 public class JwtTokenService {
+
+    public static final String BEARER = "Bearer ";
 
     private final Logger logger;
 
@@ -85,6 +88,12 @@ public class JwtTokenService {
     public void setTokenToHeader(HttpServletResponse response, JwtDetails jwtDetails) {
         // this will reset token expiration
         String freshToken = generateAccessToken(jwtDetails);
-        response.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + freshToken);
+        response.setHeader(HttpHeaders.AUTHORIZATION, BEARER + freshToken);
+    }
+
+    public ResponseEntity.BodyBuilder responseEntityWithAuthorizationHeader(JwtDetails jwtDetails) {
+        String token = generateAccessToken(jwtDetails);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.AUTHORIZATION, BEARER + token);
     }
 }
