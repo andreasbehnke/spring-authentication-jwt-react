@@ -43,7 +43,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
                     userAuthenticationRequest.getUsername(), userAuthenticationRequest.getPassword());
             Authentication authentication = this.getAuthenticationManager().authenticate(authRequest);
             UserAuthenticationDetails authDetails = (UserAuthenticationDetails) authentication.getPrincipal();
-            jwtTokenService.setTokenToHeader(response, new JwtDetails(authDetails.getUserKey()));
+            jwtTokenService.setToken(response, new JwtDetails(authDetails.getUserKey()));
             objectMapper.writeValue(response.getOutputStream(), new UserView(authDetails.getUserKey(), authDetails.getUsername()));
             return authentication;
         } catch (IOException e) {
