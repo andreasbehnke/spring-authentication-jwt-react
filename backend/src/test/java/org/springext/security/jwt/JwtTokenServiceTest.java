@@ -12,8 +12,9 @@ public class JwtTokenServiceTest {
     @Test
     public void testGenerateToken() {
         String userId = UUID.randomUUID().toString();
-        JwtTokenService jwtTokenService = new JwtTokenService("abcde", 60,
-                "example.com", false, null, NOPLogger.NOP_LOGGER);
+        JwtConfigurationProperties properties = new JwtConfigurationProperties("abcde", 60,
+                "example.com", false, null);
+        JwtTokenService jwtTokenService = new JwtTokenService(properties, NOPLogger.NOP_LOGGER);
         String token = jwtTokenService.generateAccessToken(new JwtDetails(userId));
         JwtDetails details = jwtTokenService.getTokenDetails(token);
         assertNotNull(details);
@@ -22,19 +23,22 @@ public class JwtTokenServiceTest {
 
     @Test
     public void testExpirationDate() {
-        JwtTokenService jwtTokenService = new JwtTokenService("abcde", 0,
-                "example.com", false, null, NOPLogger.NOP_LOGGER);
+        JwtConfigurationProperties properties = new JwtConfigurationProperties("abcde", 0,
+                "example.com", false, null);
+        JwtTokenService jwtTokenService = new JwtTokenService(properties, NOPLogger.NOP_LOGGER);
         String token = jwtTokenService.generateAccessToken(new JwtDetails(UUID.randomUUID().toString()));
         assertNull(jwtTokenService.getTokenDetails(token));
     }
 
     @Test
     public void testWrongSigningKeyDate() {
-        JwtTokenService jwtTokenService = new JwtTokenService("abcde", 60,
-                "example.com", false, null, NOPLogger.NOP_LOGGER);
+        JwtConfigurationProperties properties = new JwtConfigurationProperties("abcde", 60,
+                "example.com", false, null);
+        JwtTokenService jwtTokenService = new JwtTokenService(properties, NOPLogger.NOP_LOGGER);
         String token = jwtTokenService.generateAccessToken(new JwtDetails(UUID.randomUUID().toString()));
-        jwtTokenService = new JwtTokenService("edcba", 60,
-                "example.com", false, null, NOPLogger.NOP_LOGGER);
+        properties = new JwtConfigurationProperties("edcba", 60,
+                "example.com", false, null);
+        jwtTokenService = new JwtTokenService(properties, NOPLogger.NOP_LOGGER);
         assertNull(jwtTokenService.getTokenDetails(token));
     }
 }

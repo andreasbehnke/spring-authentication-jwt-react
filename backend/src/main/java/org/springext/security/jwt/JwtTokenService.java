@@ -25,34 +25,18 @@ public class JwtTokenService {
 
     private final Logger logger;
 
-    private final String jwtSigningKey;
-
-    private final int jwtExpirationTimeInSeconds;
-
-    private final String jwtIssuer;
-
-    private boolean useCookie;
-
-    private String cookieName;
+    private final JwtConfigurationProperties jwtConfigurationProperties;
 
     public JwtTokenService(
-            @Value("${authentication.jwt.signingKey}") String jwtSigningKey,
-            @Value("${authentication.jwt.expirationTimeInSeconds}") int jwtExpirationTimeInSeconds,
-            @Value("${authentication.jwt.issuer}") String jwtIssuer,
-            @Value("${authentication.jwt.useCookie}") boolean useCookie,
-            @Value("${authentication.jwt.cookieName}") String cookieName,
+            JwtConfigurationProperties jwtConfigurationProperties,
             Logger logger) {
-        this.jwtSigningKey = jwtSigningKey;
-        this.jwtExpirationTimeInSeconds = jwtExpirationTimeInSeconds;
-        this.jwtIssuer = jwtIssuer;
-        this.useCookie = useCookie;
-        this.cookieName = cookieName;
+        this.jwtConfigurationProperties = jwtConfigurationProperties;
         this.logger = logger;
     }
 
     JwtDetails getTokenDetails(String token) {
         try {
-            Claims claims = Jwts.parser().setSigningKey(jwtSigningKey)
+            Claims claims = Jwts.parser().setSigningKey(jwtConfigurationProperties.getJwtSigningKey())
                     .parseClaimsJws(token).getBody();
             return new JwtDetails(claims.getSubject());
         } catch (SignatureException ex) {
@@ -71,15 +55,15 @@ public class JwtTokenService {
         Assert.notNull(details, "Parameter details must not be null");
         return Jwts.builder()
                 .setSubject(details.getUserKey())
-                .setIssuer(jwtIssuer)
+                .setIssuer(jwtConfigurationProperties.getJwtIssuer())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + (long)jwtExpirationTimeInSeconds * 1000))
-                .signWith(SignatureAlgorithm.HS512, jwtSigningKey)
+                .setExpiration(new Date(System.currentTimeMillis() + (long)jwtConfigurationProperties.getJwtExpirationTimeInSeconds() * 1000))
+                .signWith(SignatureAlgorithm.HS512, jwtConfigurationProperties.getJwtSigningKey())
                 .compact();
     }
 
     public JwtDetails getTokenDetails(HttpServletRequest request) {
-        if (useCookie) {
+        if (jwtConfigurationProperties.isUseCookie()) {
             return getTokenDetailsFromCookie(request);
         } else {
             return getTokenDetailsFromHeader(request);
@@ -106,7 +90,7 @@ public class JwtTokenService {
             throw new BadCredentialsException("JWT cookie is missing");
         }
         Cookie cookie = Arrays.stream(cookies)
-                .filter(c -> c.getName().equals(cookieName))
+                .filter(c -> c.getName().equals(jwtConfigurationProperties.getCookieName()))
                 .findFirst()
                 .orElseThrow(() -> new BadCredentialsException("JWT cookie is missing"));
 
@@ -118,7 +102,7 @@ public class JwtTokenService {
     }
 
     public void setToken(HttpServletResponse response, JwtDetails jwtDetails) {
-        if (useCookie) {
+        if (jwtConfigurationProperties.isUseCookie()) {
             setTokenCookie(response, jwtDetails);
         } else {
             setTokenToHeader(response, jwtDetails);
@@ -134,11 +118,11 @@ public class JwtTokenService {
     private void setTokenCookie(HttpServletResponse response, JwtDetails jwtDetails) {
         // this will reset token expiration
         String freshToken = generateAccessToken(jwtDetails);
-        Cookie cookie = new Cookie(cookieName, freshToken);
+        Cookie cookie = new Cookie(jwtConfigurationProperties.getCookieName(), freshToken);
         //TODO: Make Domain, Path and Secure configurable!
         cookie.setPath("/");
         cookie.setHttpOnly(true);
-        cookie.setMaxAge(jwtExpirationTimeInSeconds);
+        cookie.setMaxAge(jwtConfigurationProperties.getJwtExpirationTimeInSeconds());
         response.addCookie(cookie);
     }
 }
