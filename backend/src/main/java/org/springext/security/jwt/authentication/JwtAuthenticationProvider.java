@@ -1,5 +1,7 @@
-package org.springext.security.jwt;
+package org.springext.security.jwt.authentication;
 
+import org.springext.security.jwt.service.JwtDetails;
+import org.springext.security.jwt.userdetails.UserAuthenticationDetailsService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
@@ -9,9 +11,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
-    private final UserAuthenticationDetailsService detailsService;
+    private final UserAuthenticationDetailsService<?> detailsService;
 
-    public JwtAuthenticationProvider(UserAuthenticationDetailsService detailsService) {
+    public JwtAuthenticationProvider(UserAuthenticationDetailsService<?> detailsService) {
         this.detailsService = detailsService;
     }
 

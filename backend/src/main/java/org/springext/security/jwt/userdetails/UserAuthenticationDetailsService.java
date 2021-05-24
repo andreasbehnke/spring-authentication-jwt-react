@@ -1,4 +1,4 @@
-package org.springext.security.jwt;
+package org.springext.security.jwt.userdetails;
 
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;

@@ -1,4 +1,4 @@
-package org.springext.security.jwt;
+package org.springext.security.jwt.service;
 
 /**
  * Holds all information about a valid JSON Web Token.

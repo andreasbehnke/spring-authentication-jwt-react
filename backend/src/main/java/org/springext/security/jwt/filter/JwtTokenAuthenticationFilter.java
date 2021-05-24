@@ -1,5 +1,8 @@
-package org.springext.security.jwt;
+package org.springext.security.jwt.filter;
 
+import org.springext.security.jwt.authentication.JwtAuthenticationToken;
+import org.springext.security.jwt.service.JwtDetails;
+import org.springext.security.jwt.service.JwtTokenService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

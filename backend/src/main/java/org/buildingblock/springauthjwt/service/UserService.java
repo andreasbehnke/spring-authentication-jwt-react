@@ -2,7 +2,7 @@ package org.buildingblock.springauthjwt.service;
 
 import org.buildingblock.springauthjwt.model.UserAuthenticationDetailsImpl;
 import org.buildingblock.springauthjwt.service.repositories.UserRepository;
-import org.springext.security.jwt.UserAuthenticationDetailsService;
+import org.springext.security.jwt.userdetails.UserAuthenticationDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;

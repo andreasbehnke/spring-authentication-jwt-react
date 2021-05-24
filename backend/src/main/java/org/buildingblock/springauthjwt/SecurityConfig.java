@@ -2,10 +2,10 @@ package org.buildingblock.springauthjwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.buildingblock.springauthjwt.service.UserService;
-import org.springext.security.jwt.JsonUsernamePasswordAuthenticationFilter;
-import org.springext.security.jwt.JwtAuthenticationProvider;
-import org.springext.security.jwt.JwtTokenAuthenticationFilter;
-import org.springext.security.jwt.JwtTokenService;
+import org.springext.security.jwt.filter.JsonUsernamePasswordAuthenticationFilter;
+import org.springext.security.jwt.authentication.JwtAuthenticationProvider;
+import org.springext.security.jwt.filter.JwtTokenAuthenticationFilter;
+import org.springext.security.jwt.service.JwtTokenService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;

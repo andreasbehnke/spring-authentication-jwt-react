@@ -1,4 +1,4 @@
-package org.springext.security.jwt;
+package org.springext.security.jwt.dto;
 
 public class UserView {
 

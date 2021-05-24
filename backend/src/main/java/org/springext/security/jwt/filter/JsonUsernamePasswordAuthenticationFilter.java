@@ -1,6 +1,11 @@
-package org.springext.security.jwt;
+package org.springext.security.jwt.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springext.security.jwt.dto.UserAuthenticationRequest;
+import org.springext.security.jwt.dto.UserView;
+import org.springext.security.jwt.service.JwtDetails;
+import org.springext.security.jwt.service.JwtTokenService;
+import org.springext.security.jwt.userdetails.UserAuthenticationDetails;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

@@ -1,5 +1,6 @@
-package org.springext.security.jwt;
+package org.springext.security.jwt.authentication;
 
+import org.springext.security.jwt.service.JwtDetails;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 public class JwtAuthenticationToken extends UsernamePasswordAuthenticationToken {

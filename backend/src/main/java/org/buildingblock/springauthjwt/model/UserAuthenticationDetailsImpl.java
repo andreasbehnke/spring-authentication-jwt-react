@@ -1,7 +1,7 @@
 package org.buildingblock.springauthjwt.model;
 
 import org.buildingblock.springauthjwt.entities.User;
-import org.springext.security.jwt.UserAuthenticationDetails;
+import org.springext.security.jwt.userdetails.UserAuthenticationDetails;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;

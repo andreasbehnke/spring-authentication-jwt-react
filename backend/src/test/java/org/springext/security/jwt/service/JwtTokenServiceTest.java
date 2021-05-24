@@ -1,7 +1,10 @@
-package org.springext.security.jwt;
+package org.springext.security.jwt.service;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.helpers.NOPLogger;
+import org.springext.security.jwt.service.JwtConfigurationProperties;
+import org.springext.security.jwt.service.JwtDetails;
+import org.springext.security.jwt.service.JwtTokenService;
 
 import java.util.UUID;
 

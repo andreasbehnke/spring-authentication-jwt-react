@@ -1,8 +1,7 @@
-package org.springext.security.jwt;
+package org.springext.security.jwt.service;
 
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
