@@ -1,6 +1,8 @@
 package org.buildingblock.springauthjwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.buildingblock.springauthjwt.service.UserService;
+import org.springext.security.jwt.JsonUsernamePasswordAuthenticationFilter;
 import org.springext.security.jwt.JwtAuthenticationProvider;
 import org.springext.security.jwt.JwtTokenAuthenticationFilter;
 import org.springext.security.jwt.JwtTokenService;
@@ -24,6 +26,8 @@ import javax.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final ObjectMapper objectMapper;
+
     private final JwtTokenService jwtTokenService;
 
     private final UserService userService;
@@ -32,8 +36,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final boolean autoRefreshToken;
 
-    public SecurityConfig(JwtTokenService jwtTokenService, UserService userService, JwtAuthenticationProvider jwtAuthenticationProvider,
+    public SecurityConfig(ObjectMapper objectMapper, JwtTokenService jwtTokenService, UserService userService,
+                          JwtAuthenticationProvider jwtAuthenticationProvider,
                           @Value("${authentication.jwt.autoRefreshToken}") boolean autoRefreshToken) {
+        this.objectMapper = objectMapper;
         this.jwtTokenService = jwtTokenService;
         this.userService = userService;
         this.jwtAuthenticationProvider = jwtAuthenticationProvider;
@@ -88,6 +94,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // private endpoints
                 .anyRequest().authenticated();
 
+        // Add JSON username password authentication filter
+        JsonUsernamePasswordAuthenticationFilter jsonUsernamePasswordAuthenticationFilter =
+                new JsonUsernamePasswordAuthenticationFilter(
+                        new AntPathRequestMatcher("/public/login"),
+                        objectMapper,
+                        jwtTokenService,
+                        authenticationManagerBean()
+                );
+        http.addFilterAt(
+                jsonUsernamePasswordAuthenticationFilter,
+                UsernamePasswordAuthenticationFilter.class
+        );
+
         // Add JWT token filter
         JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter =
                 new JwtTokenAuthenticationFilter(
@@ -95,9 +114,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         jwtTokenService,
                         authenticationManagerBean());
         jwtTokenAuthenticationFilter.setAutoRefreshToken(autoRefreshToken);
-        http.addFilterAt(
+        http.addFilterAfter(
                 jwtTokenAuthenticationFilter,
-                UsernamePasswordAuthenticationFilter.class
+                JsonUsernamePasswordAuthenticationFilter.class
         );
     }
 }
