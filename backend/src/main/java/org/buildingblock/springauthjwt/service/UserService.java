@@ -33,9 +33,4 @@ public class UserService implements UserAuthenticationDetailsService<UserAuthent
                 .map(UserAuthenticationDetailsImpl::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User " + userKey + " not found"));
     }
-
-    @Override
-    public UserAuthenticationDetailsImpl getAuthorizedUser() {
-        return null;
-    }
 }
