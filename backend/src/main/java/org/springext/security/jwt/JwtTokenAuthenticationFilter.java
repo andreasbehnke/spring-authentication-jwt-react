@@ -35,10 +35,11 @@ public class JwtTokenAuthenticationFilter extends AbstractAuthenticationProcessi
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         JwtDetails jwtDetails = jwtTokenService.getTokenDetailsFromHeader(request);
+        Authentication authentication = getAuthenticationManager().authenticate(new JwtAuthenticationToken(jwtDetails));
         if (autoRefreshToken) {
             jwtTokenService.setTokenToHeader(response, jwtDetails);
         }
-        return getAuthenticationManager().authenticate(new JwtAuthenticationToken(jwtDetails));
+        return authentication;
     }
 
     @Override
