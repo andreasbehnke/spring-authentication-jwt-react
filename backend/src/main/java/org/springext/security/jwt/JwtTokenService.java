@@ -4,7 +4,6 @@ import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -26,7 +25,7 @@ public class JwtTokenService {
 
     private final String jwtSigningKey;
 
-    private final int jwtExpirationTimeInSeconds;
+    private final long jwtExpirationTimeInSeconds;
 
     private final String jwtIssuer;
 
@@ -48,14 +47,12 @@ public class JwtTokenService {
             return new JwtDetails(claims.getSubject());
         } catch (SignatureException ex) {
             logger.error("Invalid JWT signature - {}", ex.getMessage());
-        } catch (MalformedJwtException ex) {
+        } catch (MalformedJwtException | IllegalArgumentException ex) {
             logger.error("Invalid JWT token - {}", ex.getMessage());
         } catch (ExpiredJwtException ex) {
             logger.warn("Expired JWT token - {}", ex.getMessage());
         } catch (UnsupportedJwtException ex) {
             logger.error("Unsupported JWT token - {}", ex.getMessage());
-        } catch (IllegalArgumentException ex) {
-            logger.error("Invalid JWT token - {}", ex.getMessage());
         }
         return null;
     }
@@ -89,11 +86,5 @@ public class JwtTokenService {
         // this will reset token expiration
         String freshToken = generateAccessToken(jwtDetails);
         response.setHeader(HttpHeaders.AUTHORIZATION, BEARER + freshToken);
-    }
-
-    public ResponseEntity.BodyBuilder responseEntityWithAuthorizationHeader(JwtDetails jwtDetails) {
-        String token = generateAccessToken(jwtDetails);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION, BEARER + token);
     }
 }
