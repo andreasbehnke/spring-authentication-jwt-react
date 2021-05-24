@@ -1,7 +1,6 @@
 package org.springext.security.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.buildingblock.springauthjwt.model.UserAuthenticationRequestImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -40,7 +39,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         }
         try {
-            UserAuthenticationRequestImpl userAuthenticationRequest = objectMapper.readValue(request.getInputStream(), UserAuthenticationRequestImpl.class);
+            UserAuthenticationRequest userAuthenticationRequest = objectMapper.readValue(request.getInputStream(), UserAuthenticationRequest.class);
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
                     userAuthenticationRequest.getUsername(), userAuthenticationRequest.getPassword());
             Authentication authentication = this.getAuthenticationManager().authenticate(authRequest);
@@ -54,7 +53,7 @@ public class JsonUsernamePasswordAuthenticationFilter extends AbstractAuthentica
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
         // do nothing, simply return with authorization header or cookie
     }
 }
