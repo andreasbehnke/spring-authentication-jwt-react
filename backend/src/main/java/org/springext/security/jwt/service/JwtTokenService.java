@@ -35,7 +35,7 @@ public class JwtTokenService {
 
     JwtDetails getTokenDetails(String token) {
         try {
-            Claims claims = Jwts.parser().setSigningKey(jwtConfigurationProperties.getJwtSigningKey())
+            Claims claims = Jwts.parser().setSigningKey(jwtConfigurationProperties.getSigningKey())
                     .parseClaimsJws(token).getBody();
             return new JwtDetails(claims.getSubject());
         } catch (SignatureException ex) {
@@ -54,10 +54,10 @@ public class JwtTokenService {
         Assert.notNull(details, "Parameter details must not be null");
         return Jwts.builder()
                 .setSubject(details.getUserKey())
-                .setIssuer(jwtConfigurationProperties.getJwtIssuer())
+                .setIssuer(jwtConfigurationProperties.getIssuer())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + (long)jwtConfigurationProperties.getJwtExpirationTimeInSeconds() * 1000))
-                .signWith(SignatureAlgorithm.HS512, jwtConfigurationProperties.getJwtSigningKey())
+                .setExpiration(new Date(System.currentTimeMillis() + (long)jwtConfigurationProperties.getExpirationTimeInSeconds() * 1000))
+                .signWith(SignatureAlgorithm.HS512, jwtConfigurationProperties.getSigningKey())
                 .compact();
     }
 
@@ -121,7 +121,7 @@ public class JwtTokenService {
         //TODO: Make Domain, Path and Secure configurable!
         cookie.setPath("/");
         cookie.setHttpOnly(true);
-        cookie.setMaxAge(jwtConfigurationProperties.getJwtExpirationTimeInSeconds());
+        cookie.setMaxAge(jwtConfigurationProperties.getExpirationTimeInSeconds());
         response.addCookie(cookie);
     }
 }

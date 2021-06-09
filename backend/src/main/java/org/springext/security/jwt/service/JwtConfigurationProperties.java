@@ -7,11 +7,11 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("authentication.jwt")
 public class JwtConfigurationProperties {
 
-    private String jwtSigningKey;
+    private String signingKey;
 
-    private int jwtExpirationTimeInSeconds;
+    private int expirationTimeInSeconds;
 
-    private String jwtIssuer;
+    private String issuer;
 
     private boolean useCookie;
 
@@ -19,37 +19,37 @@ public class JwtConfigurationProperties {
 
     public JwtConfigurationProperties() { }
 
-    public JwtConfigurationProperties(String jwtSigningKey, int jwtExpirationTimeInSeconds,
-                                      String jwtIssuer, boolean useCookie, String cookieName) {
-        this.jwtSigningKey = jwtSigningKey;
-        this.jwtExpirationTimeInSeconds = jwtExpirationTimeInSeconds;
-        this.jwtIssuer = jwtIssuer;
+    public JwtConfigurationProperties(String signingKey, int expirationTimeInSeconds,
+                                      String issuer, boolean useCookie, String cookieName) {
+        this.signingKey = signingKey;
+        this.expirationTimeInSeconds = expirationTimeInSeconds;
+        this.issuer = issuer;
         this.useCookie = useCookie;
         this.cookieName = cookieName;
     }
 
-    public String getJwtSigningKey() {
-        return jwtSigningKey;
+    public String getSigningKey() {
+        return signingKey;
     }
 
-    public void setJwtSigningKey(String jwtSigningKey) {
-        this.jwtSigningKey = jwtSigningKey;
+    public void setSigningKey(String signingKey) {
+        this.signingKey = signingKey;
     }
 
-    public int getJwtExpirationTimeInSeconds() {
-        return jwtExpirationTimeInSeconds;
+    public int getExpirationTimeInSeconds() {
+        return expirationTimeInSeconds;
     }
 
-    public void setJwtExpirationTimeInSeconds(int jwtExpirationTimeInSeconds) {
-        this.jwtExpirationTimeInSeconds = jwtExpirationTimeInSeconds;
+    public void setExpirationTimeInSeconds(int expirationTimeInSeconds) {
+        this.expirationTimeInSeconds = expirationTimeInSeconds;
     }
 
-    public String getJwtIssuer() {
-        return jwtIssuer;
+    public String getIssuer() {
+        return issuer;
     }
 
-    public void setJwtIssuer(String jwtIssuer) {
-        this.jwtIssuer = jwtIssuer;
+    public void setIssuer(String issuer) {
+        this.issuer = issuer;
     }
 
     public boolean isUseCookie() {
