@@ -1,9 +1,12 @@
 package org.buildingblock.springauthjwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.buildingblock.springauthjwt.model.UserAuthenticationDetailsImpl;
 import org.buildingblock.springauthjwt.service.UserService;
-import org.springext.security.jwt.filter.JsonUsernamePasswordAuthenticationFilter;
 import org.springext.security.jwt.authentication.JwtAuthenticationProvider;
+import org.springext.security.jwt.dto.UserRegistrationRequest;
+import org.springext.security.jwt.filter.JsonUserRegistrationFilter;
+import org.springext.security.jwt.filter.JsonUsernamePasswordAuthenticationFilter;
 import org.springext.security.jwt.filter.JwtTokenAuthenticationFilter;
 import org.springext.security.jwt.service.JwtTokenService;
 import org.springframework.beans.factory.annotation.Value;
@@ -106,6 +109,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 jsonUsernamePasswordAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class
         );
+
+        // Add JSON username registration filter
+        JsonUserRegistrationFilter<UserAuthenticationDetailsImpl, UserRegistrationRequest> jsonUserRegistrationFilter =
+                new JsonUserRegistrationFilter<UserAuthenticationDetailsImpl, UserRegistrationRequest>(
+                        new AntPathRequestMatcher("/public/register"),
+                        objectMapper,
+                        passwordEncoder(),
+                        userService
+                );
+        http.addFilterAt(
+                jsonUserRegistrationFilter,
+                JsonUsernamePasswordAuthenticationFilter.class
+        );
+
 
         // Add JWT token filter
         JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter =

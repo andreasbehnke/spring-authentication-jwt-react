@@ -1,7 +1,12 @@
 package org.buildingblock.springauthjwt.service;
 
+import org.buildingblock.springauthjwt.entities.User;
+import org.buildingblock.springauthjwt.entities.UserTicket;
 import org.buildingblock.springauthjwt.model.UserAuthenticationDetailsImpl;
 import org.buildingblock.springauthjwt.service.repositories.UserRepository;
+import org.buildingblock.springauthjwt.service.repositories.UserTicketRepository;
+import org.springext.security.jwt.dto.UserRegistrationRequest;
+import org.springext.security.jwt.userdetails.ConfirmationTicketInfo;
 import org.springext.security.jwt.userdetails.UserAuthenticationDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -10,12 +15,15 @@ import org.springframework.util.Assert;
 import java.util.UUID;
 
 @Service
-public class UserService implements UserAuthenticationDetailsService<UserAuthenticationDetailsImpl> {
+public class UserService implements UserAuthenticationDetailsService<UserAuthenticationDetailsImpl, UserRegistrationRequest> {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private final UserTicketRepository userTicketRepository;
+
+    public UserService(UserRepository userRepository, UserTicketRepository userTicketRepository) {
         this.userRepository = userRepository;
+        this.userTicketRepository = userTicketRepository;
     }
 
     @Override
@@ -32,5 +40,26 @@ public class UserService implements UserAuthenticationDetailsService<UserAuthent
         return userRepository.findById(UUID.fromString(userKey))
                 .map(UserAuthenticationDetailsImpl::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User " + userKey + " not found"));
+    }
+
+    @Override
+    public boolean exists(UserRegistrationRequest userRegistrationRequest) {
+        return userRepository.existsByEmail(userRegistrationRequest.getUsername());
+    }
+
+    @Override
+    public ConfirmationTicketInfo<UserAuthenticationDetailsImpl> registerNewUser(UserRegistrationRequest userRegistrationRequest, String encodedPassword) {
+        User user = new User();
+        user.setEmail(userRegistrationRequest.getUsername());
+        user.setEnabled(false); // user will be enabled when the confirmation ticket will be redeemed
+        user.setHashedPassword(encodedPassword);
+        user = userRepository.save(user);
+        UserTicket userTicket = new UserTicket();
+        userTicket.setUser(user);
+        userTicket = userTicketRepository.save(userTicket);
+        return new ConfirmationTicketInfo<>(
+                userTicket.getId().toString(),
+                user.getEmail(),
+                new UserAuthenticationDetailsImpl(user));
     }
 }
