@@ -1,17 +1,14 @@
 package org.springext.security.jwt.userdetails;
 
-public class ConfirmationTicketInfo<U extends UserAuthenticationDetails> {
+public class ConfirmationTicketInfo {
 
     private final String ticketId;
 
     private final String recipientEmail;
 
-    private final U userAuthenticationDetails;
-
-    public ConfirmationTicketInfo(String ticketId, String recipientEmail, U userAuthenticationDetails) {
+    public ConfirmationTicketInfo(String ticketId, String recipientEmail) {
         this.ticketId = ticketId;
         this.recipientEmail = recipientEmail;
-        this.userAuthenticationDetails = userAuthenticationDetails;
     }
 
     public String getTicketId() {
@@ -20,9 +17,5 @@ public class ConfirmationTicketInfo<U extends UserAuthenticationDetails> {
 
     public String getRecipientEmail() {
         return recipientEmail;
-    }
-
-    public U getUserAuthenticationDetails() {
-        return userAuthenticationDetails;
     }
 }

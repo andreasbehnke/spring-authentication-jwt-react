@@ -17,6 +17,8 @@ public class JwtConfigurationProperties {
 
     private String cookieName;
 
+    private boolean autoRefreshToken;
+
     public JwtConfigurationProperties() { }
 
     public JwtConfigurationProperties(String signingKey, int expirationTimeInSeconds,
@@ -66,5 +68,13 @@ public class JwtConfigurationProperties {
 
     public void setCookieName(String cookieName) {
         this.cookieName = cookieName;
+    }
+
+    public boolean isAutoRefreshToken() {
+        return autoRefreshToken;
+    }
+
+    public void setAutoRefreshToken(boolean autoRefreshToken) {
+        this.autoRefreshToken = autoRefreshToken;
     }
 }

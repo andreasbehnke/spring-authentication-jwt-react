@@ -8,7 +8,9 @@ import org.springext.security.jwt.dto.UserRegistrationRequest;
 import org.springext.security.jwt.filter.JsonUserRegistrationFilter;
 import org.springext.security.jwt.filter.JsonUsernamePasswordAuthenticationFilter;
 import org.springext.security.jwt.filter.JwtTokenAuthenticationFilter;
+import org.springext.security.jwt.service.JwtConfigurationProperties;
 import org.springext.security.jwt.service.JwtTokenService;
+import org.springext.security.jwt.userdetails.SimpleMailConfirmationTicketService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,16 +39,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
+    private final SimpleMailConfirmationTicketService confirmationTicketService;
+
     private final boolean autoRefreshToken;
 
     public SecurityConfig(ObjectMapper objectMapper, JwtTokenService jwtTokenService, UserService userService,
+                          SimpleMailConfirmationTicketService confirmationTicketService,
                           JwtAuthenticationProvider jwtAuthenticationProvider,
-                          @Value("${authentication.jwt.autoRefreshToken}") boolean autoRefreshToken) {
+                          JwtConfigurationProperties jwtConfigurationProperties) {
         this.objectMapper = objectMapper;
         this.jwtTokenService = jwtTokenService;
         this.userService = userService;
+        this.confirmationTicketService = confirmationTicketService;
         this.jwtAuthenticationProvider = jwtAuthenticationProvider;
-        this.autoRefreshToken = autoRefreshToken;
+        this.autoRefreshToken = jwtConfigurationProperties.isAutoRefreshToken();
     }
 
     @Override
@@ -112,11 +118,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Add JSON username registration filter
         JsonUserRegistrationFilter<UserAuthenticationDetailsImpl, UserRegistrationRequest> jsonUserRegistrationFilter =
-                new JsonUserRegistrationFilter<UserAuthenticationDetailsImpl, UserRegistrationRequest>(
+                new JsonUserRegistrationFilter<>(
                         new AntPathRequestMatcher("/public/register"),
                         objectMapper,
                         passwordEncoder(),
-                        userService
+                        userService,
+                        confirmationTicketService
                 );
         http.addFilterAt(
                 jsonUserRegistrationFilter,

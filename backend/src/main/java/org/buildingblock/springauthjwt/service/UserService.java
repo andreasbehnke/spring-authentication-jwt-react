@@ -48,7 +48,7 @@ public class UserService implements UserAuthenticationDetailsService<UserAuthent
     }
 
     @Override
-    public ConfirmationTicketInfo<UserAuthenticationDetailsImpl> registerNewUser(UserRegistrationRequest userRegistrationRequest, String encodedPassword) {
+    public ConfirmationTicketInfo registerNewUser(UserRegistrationRequest userRegistrationRequest, String encodedPassword) {
         User user = new User();
         user.setEmail(userRegistrationRequest.getUsername());
         user.setEnabled(false); // user will be enabled when the confirmation ticket will be redeemed
@@ -57,9 +57,8 @@ public class UserService implements UserAuthenticationDetailsService<UserAuthent
         UserTicket userTicket = new UserTicket();
         userTicket.setUser(user);
         userTicket = userTicketRepository.save(userTicket);
-        return new ConfirmationTicketInfo<>(
+        return new ConfirmationTicketInfo(
                 userTicket.getId().toString(),
-                user.getEmail(),
-                new UserAuthenticationDetailsImpl(user));
+                user.getEmail());
     }
 }

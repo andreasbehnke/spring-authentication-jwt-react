@@ -6,6 +6,7 @@ import org.springext.security.jwt.dto.UserRegistrationRequest;
 import org.springext.security.jwt.dto.UserRegistrationResult;
 import org.springext.security.jwt.dto.UserRegistrationResultMessage;
 import org.springext.security.jwt.userdetails.ConfirmationTicketInfo;
+import org.springext.security.jwt.userdetails.ConfirmationTicketService;
 import org.springext.security.jwt.userdetails.UserAuthenticationDetails;
 import org.springext.security.jwt.userdetails.UserAuthenticationDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,13 +31,15 @@ public class JsonUserRegistrationFilter<U extends UserAuthenticationDetails, R e
 
     private final UserAuthenticationDetailsService<U,R> userAuthenticationDetailsService;
 
-    public JsonUserRegistrationFilter(RequestMatcher requestMatcher, ObjectMapper objectMapper,
-                                      PasswordEncoder passwordEncoder,
-                                      UserAuthenticationDetailsService<U, R> userAuthenticationDetailsService) {
+    private final ConfirmationTicketService confirmationTicketService;
+
+    public JsonUserRegistrationFilter(RequestMatcher requestMatcher, ObjectMapper objectMapper, PasswordEncoder passwordEncoder,
+                                      UserAuthenticationDetailsService<U, R> userAuthenticationDetailsService, ConfirmationTicketService confirmationTicketService) {
         this.requestMatcher = requestMatcher;
         this.objectMapper = objectMapper;
         this.passwordEncoder = passwordEncoder;
         this.userAuthenticationDetailsService = userAuthenticationDetailsService;
+        this.confirmationTicketService = confirmationTicketService;
     }
 
     @Override
@@ -67,9 +70,9 @@ public class JsonUserRegistrationFilter<U extends UserAuthenticationDetails, R e
         if (userAuthenticationDetailsService.exists(userAuthenticationRequest)) {
             return UserRegistrationResult.userExists();
         }
-        ConfirmationTicketInfo<U> confirmationTicketInfo =
+        ConfirmationTicketInfo confirmationTicketInfo =
                 userAuthenticationDetailsService.registerNewUser(userAuthenticationRequest, passwordEncoder.encode(userAuthenticationRequest.getPassword()));
-        // TODO: send confirmation notification email
+        confirmationTicketService.sendConfirmationTicket(confirmationTicketInfo);
         return UserRegistrationResult.ok();
     }
 }

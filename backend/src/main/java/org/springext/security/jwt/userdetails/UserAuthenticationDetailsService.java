@@ -13,6 +13,7 @@ public interface UserAuthenticationDetailsService<U extends UserAuthenticationDe
 
     U loadUserByKey(String userKey) throws UsernameNotFoundException;
 
+    @SuppressWarnings("unchecked")
     default U getAuthorizedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getPrincipal() == null || !(authentication.getPrincipal() instanceof UserAuthenticationDetails)) {
@@ -23,5 +24,5 @@ public interface UserAuthenticationDetailsService<U extends UserAuthenticationDe
 
     boolean exists(R userRegistrationRequest);
 
-    ConfirmationTicketInfo<U> registerNewUser(R userRegistrationRequest, String encodedPassword);
+    ConfirmationTicketInfo registerNewUser(R userRegistrationRequest, String encodedPassword);
 }
