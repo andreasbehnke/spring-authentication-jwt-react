@@ -11,7 +11,7 @@ services:
     volumes:
        - postgres_auth_jwt:/data/postgres
     ports:
-      - "5433:5432"
+      - "127.0.0.1:5433:5432"
     networks:
       - postgres_auth_jwt
     restart: unless-stopped
@@ -27,10 +27,17 @@ services:
        - pgadmin_auth_jwt:/root/.pgadmin
 
     ports:
-      - "${PGADMIN_PORT:-8090}:80"
+      - "127.0.0.1:${PGADMIN_PORT:-8090}:80"
     networks:
       - postgres_auth_jwt
     restart: unless-stopped
+
+  mailcatcher:
+    container_name: mailcatcher_auth_jwt
+    image: sj26/mailcatcher
+    ports:
+      - "127.0.0.1:1025:1025"
+      - "127.0.0.1:1080:1080"
 
 networks:
   postgres_auth_jwt:
@@ -38,4 +45,6 @@ networks:
 
 volumes:
     postgres_auth_jwt:
+      name: "postgres_auth_jwt"
     pgadmin_auth_jwt:
+      name: "pgadmin_auth_jwt"
