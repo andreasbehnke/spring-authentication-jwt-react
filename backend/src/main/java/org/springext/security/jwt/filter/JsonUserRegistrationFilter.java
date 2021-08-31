@@ -33,13 +33,17 @@ public class JsonUserRegistrationFilter<U extends UserAuthenticationDetails, R e
 
     private final ConfirmationTicketService confirmationTicketService;
 
+    private final Class<R> classOfUserRegistrationRequest;
+
     public JsonUserRegistrationFilter(RequestMatcher requestMatcher, ObjectMapper objectMapper, PasswordEncoder passwordEncoder,
-                                      UserAuthenticationDetailsService<U, R> userAuthenticationDetailsService, ConfirmationTicketService confirmationTicketService) {
+                                      UserAuthenticationDetailsService<U, R> userAuthenticationDetailsService, ConfirmationTicketService confirmationTicketService,
+                                      Class<R> classOfUserRegistrationRequest) {
         this.requestMatcher = requestMatcher;
         this.objectMapper = objectMapper;
         this.passwordEncoder = passwordEncoder;
         this.userAuthenticationDetailsService = userAuthenticationDetailsService;
         this.confirmationTicketService = confirmationTicketService;
+        this.classOfUserRegistrationRequest = classOfUserRegistrationRequest;
     }
 
     @Override
@@ -51,7 +55,7 @@ public class JsonUserRegistrationFilter<U extends UserAuthenticationDetails, R e
     private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         if (requestMatcher.matches(request)) {
-            R userAuthenticationRequest = objectMapper.readValue(request.getInputStream(), new TypeReference<R>() {});
+            R userAuthenticationRequest = objectMapper.readValue(request.getInputStream(), classOfUserRegistrationRequest);
             UserRegistrationResult result = registerNewUser(userAuthenticationRequest);
             if (result.getMessage() != UserRegistrationResultMessage.OK) {
                 response.setStatus(HttpServletResponse.SC_CONFLICT);

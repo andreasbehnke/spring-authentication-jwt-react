@@ -7,6 +7,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import javax.validation.Valid;
+
 public interface UserAuthenticationDetailsService<U extends UserAuthenticationDetails, R extends UserRegistrationRequest> extends UserDetailsService {
 
     U loadUserByUsername(String username) throws UsernameNotFoundException;
@@ -24,5 +26,5 @@ public interface UserAuthenticationDetailsService<U extends UserAuthenticationDe
 
     boolean exists(R userRegistrationRequest);
 
-    ConfirmationTicketInfo registerNewUser(R userRegistrationRequest, String encodedPassword);
+    ConfirmationTicketInfo registerNewUser(@Valid R userRegistrationRequest, String encodedPassword);
 }

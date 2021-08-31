@@ -2,6 +2,7 @@ package org.buildingblock.springauthjwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.buildingblock.springauthjwt.model.UserAuthenticationDetailsImpl;
+import org.buildingblock.springauthjwt.model.UserRegistrationRequestImpl;
 import org.buildingblock.springauthjwt.service.UserService;
 import org.springext.security.jwt.authentication.JwtAuthenticationProvider;
 import org.springext.security.jwt.dto.UserRegistrationRequest;
@@ -117,13 +118,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         );
 
         // Add JSON username registration filter
-        JsonUserRegistrationFilter<UserAuthenticationDetailsImpl, UserRegistrationRequest> jsonUserRegistrationFilter =
+        JsonUserRegistrationFilter<UserAuthenticationDetailsImpl, UserRegistrationRequestImpl> jsonUserRegistrationFilter =
                 new JsonUserRegistrationFilter<>(
                         new AntPathRequestMatcher("/public/register"),
                         objectMapper,
                         passwordEncoder(),
                         userService,
-                        confirmationTicketService
+                        confirmationTicketService,
+                        UserRegistrationRequestImpl.class
                 );
         http.addFilterAt(
                 jsonUserRegistrationFilter,
