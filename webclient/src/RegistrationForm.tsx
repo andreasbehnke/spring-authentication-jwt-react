@@ -1,9 +1,9 @@
 import {Button, Grid, TextField, Typography} from "@material-ui/core";
 import React, {useState} from "react";
 import axios from "axios";
-import UserAuthenticationRequest from "./UserAuthenticationRequest";
 import {useSnackbar} from "notistack";
 import {useHistory} from "react-router-dom";
+import UserRegistrationRequest from "./UserRegistrationRequest";
 
 export default function RegistrationForm() {
 
@@ -24,7 +24,7 @@ export default function RegistrationForm() {
             return;
         }
         setSubmitting(true);
-        await axios.post<UserAuthenticationRequest>("/public/register", { password, password2, username } )
+        await axios.post<UserRegistrationRequest>("/public/register", { password, password2, username } )
             .then(() => {
                 history.push("/login");
                 enqueueSnackbar("Confirmation email has been send", { variant: "success" });
