@@ -37,7 +37,7 @@ export default function RegistrationForm() {
 
     return (
         <Grid container spacing={2}>
-            <Grid item xs={12}><Typography variant={"h6"}>Login</Typography></Grid>
+            <Grid item xs={12}><Typography variant={"h6"}>Registration</Typography></Grid>
             <Grid item xs={12}>
                 <TextField
                     fullWidth
@@ -52,7 +52,6 @@ export default function RegistrationForm() {
                     fullWidth
                     label={"Password"}
                     type="password"
-                    autoComplete={"current-password"}
                     value={password}
                     onChange={event => { setPassword(event.target.value) }}
                 />
