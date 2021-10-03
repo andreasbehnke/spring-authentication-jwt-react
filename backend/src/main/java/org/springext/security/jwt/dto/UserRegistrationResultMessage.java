@@ -3,5 +3,6 @@ package org.springext.security.jwt.dto;
 public enum UserRegistrationResultMessage {
     USER_EXISTS,
     PASSWORDS_DO_NOT_MATCH,
-    OK
+    OK,
+    INVALID_CONFIRM_TICKET
 }

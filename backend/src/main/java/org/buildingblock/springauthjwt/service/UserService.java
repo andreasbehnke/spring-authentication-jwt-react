@@ -15,6 +15,7 @@ import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -64,5 +65,25 @@ public class UserService implements UserAuthenticationDetailsService<UserAuthent
         return new ConfirmationTicketInfo(
                 userTicket.getId().toString(),
                 user.getEmail());
+    }
+
+    @Override
+    public boolean confirmRegistrationTicket(String ticketId) {
+        UUID id;
+        try {
+            id = UUID.fromString(ticketId);
+        } catch (IllegalArgumentException iae) {
+            return false;
+        }
+        Optional<UserTicket> ticket = userTicketRepository.findById(id);
+        if (ticket.isPresent()) {
+            User user = ticket.get().getUser();
+            user.setEnabled(true);
+            userRepository.save(user);
+            userTicketRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

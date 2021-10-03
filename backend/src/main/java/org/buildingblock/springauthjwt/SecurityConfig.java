@@ -5,14 +5,13 @@ import org.buildingblock.springauthjwt.model.UserAuthenticationDetailsImpl;
 import org.buildingblock.springauthjwt.model.UserRegistrationRequestImpl;
 import org.buildingblock.springauthjwt.service.UserService;
 import org.springext.security.jwt.authentication.JwtAuthenticationProvider;
-import org.springext.security.jwt.dto.UserRegistrationRequest;
+import org.springext.security.jwt.filter.JsonUserConfirmFilter;
 import org.springext.security.jwt.filter.JsonUserRegistrationFilter;
 import org.springext.security.jwt.filter.JsonUsernamePasswordAuthenticationFilter;
 import org.springext.security.jwt.filter.JwtTokenAuthenticationFilter;
 import org.springext.security.jwt.service.JwtConfigurationProperties;
 import org.springext.security.jwt.service.JwtTokenService;
 import org.springext.security.jwt.userdetails.SimpleMailConfirmationTicketService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -132,6 +131,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 JsonUsernamePasswordAuthenticationFilter.class
         );
 
+        // Add JSON confirm registration filter
+        JsonUserConfirmFilter<UserAuthenticationDetailsImpl, UserRegistrationRequestImpl> jsonUserConfirmFilter =
+                new JsonUserConfirmFilter<>(
+                        new AntPathRequestMatcher("/public/register/confirm"),
+                        objectMapper,
+                        userService
+                );
+        http.addFilterAt(
+                jsonUserConfirmFilter,
+                JsonUserRegistrationFilter.class
+        );
 
         // Add JWT token filter
         JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter =
@@ -142,7 +152,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         jwtTokenAuthenticationFilter.setAutoRefreshToken(autoRefreshToken);
         http.addFilterAfter(
                 jwtTokenAuthenticationFilter,
-                JsonUsernamePasswordAuthenticationFilter.class
+                JsonUserConfirmFilter.class
         );
     }
 }

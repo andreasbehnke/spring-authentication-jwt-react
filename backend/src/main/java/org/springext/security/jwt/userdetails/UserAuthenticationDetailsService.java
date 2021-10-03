@@ -27,4 +27,6 @@ public interface UserAuthenticationDetailsService<U extends UserAuthenticationDe
     boolean exists(R userRegistrationRequest);
 
     ConfirmationTicketInfo registerNewUser(@Valid R userRegistrationRequest, String encodedPassword);
+
+    boolean confirmRegistrationTicket(String ticketId);
 }

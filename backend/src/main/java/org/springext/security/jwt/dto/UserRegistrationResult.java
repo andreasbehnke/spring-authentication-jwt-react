@@ -16,6 +16,10 @@ public class UserRegistrationResult {
         return new UserRegistrationResult(UserRegistrationResultMessage.PASSWORDS_DO_NOT_MATCH);
     }
 
+    public static UserRegistrationResult invalidConfirmTicket() {
+        return new UserRegistrationResult(UserRegistrationResultMessage.INVALID_CONFIRM_TICKET);
+    }
+
     private UserRegistrationResult(UserRegistrationResultMessage message) {
         this.message = message;
     }
