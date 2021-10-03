@@ -1,4 +1,4 @@
-import {Button, Grid, TextField, Typography} from "@material-ui/core";
+import {Box, Button, Grid, TextField, Typography} from "@material-ui/core";
 import React, {useState} from "react";
 import axios from "axios";
 import UserAuthenticationRequest from "./UserAuthenticationRequest";
@@ -32,6 +32,10 @@ export default function LoginForm() {
             .finally(() => setSubmitting(false));
     };
 
+    const navigateToRegistration = function () {
+        history.push("/register");
+    }
+
     return (
         <Grid container spacing={2}>
             <Grid item xs={12}><Typography variant={"h6"}>Login</Typography></Grid>
@@ -55,6 +59,12 @@ export default function LoginForm() {
                 />
             </Grid>
             <Grid item container xs={12} justify={"flex-end"}>
+                <Box mr={2}>
+                    <Button
+                        variant="contained"
+                        onClick={navigateToRegistration}
+                    >Register</Button>
+                </Box>
                 <Button
                     variant="contained"
                     color="primary"
