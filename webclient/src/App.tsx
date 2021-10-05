@@ -5,6 +5,7 @@ import {SnackbarProvider} from "notistack";
 import HelloWorld from "./HelloWorld";
 import {Box, Grid, Paper} from "@material-ui/core";
 import RegistrationForm from "./RegistrationForm";
+import ConfirmRegistration from "./ConfirmRegistration";
 
 export default function App() {
   return (
@@ -15,6 +16,9 @@ export default function App() {
                       <Box p={2}>
                           <Router>
                               <Switch>
+                                  <Route path = "/register/confirm">
+                                      <ConfirmRegistration />
+                                  </Route>
                                   <Route path = "/register">
                                       <RegistrationForm />
                                   </Route>

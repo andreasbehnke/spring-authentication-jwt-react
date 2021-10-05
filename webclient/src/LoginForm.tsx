@@ -3,13 +3,19 @@ import React, {useState} from "react";
 import axios from "axios";
 import UserAuthenticationRequest from "./UserAuthenticationRequest";
 import {useSnackbar} from "notistack";
-import {useHistory} from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
+
+interface LoginRouterState {
+    initialUserName : string
+}
 
 export default function LoginForm() {
 
+    const {state: routerState} = useLocation<LoginRouterState>();
+
     const [submitting, setSubmitting] = useState<boolean>(false);
 
-    const [username, setUsername] = useState<string>("", );
+    const [username, setUsername] = useState<string>(routerState ? routerState.initialUserName : '', );
 
     const [password, setPassword] = useState<string>("", );
 
