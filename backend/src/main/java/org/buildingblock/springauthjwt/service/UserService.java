@@ -68,12 +68,12 @@ public class UserService implements UserAuthenticationDetailsService<UserAuthent
     }
 
     @Override
-    public boolean confirmRegistrationTicket(String ticketId) {
+    public Optional<UserAuthenticationDetailsImpl> confirmRegistrationTicket(String ticketId) {
         UUID id;
         try {
             id = UUID.fromString(ticketId);
         } catch (IllegalArgumentException iae) {
-            return false;
+            return Optional.empty();
         }
         Optional<UserTicket> ticket = userTicketRepository.findById(id);
         if (ticket.isPresent()) {
@@ -81,9 +81,9 @@ public class UserService implements UserAuthenticationDetailsService<UserAuthent
             user.setEnabled(true);
             userRepository.save(user);
             userTicketRepository.deleteById(id);
-            return true;
+            return Optional.of(new UserAuthenticationDetailsImpl(user));
         } else {
-            return false;
+            return Optional.empty();
         }
     }
 }

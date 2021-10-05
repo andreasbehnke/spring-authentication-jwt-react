@@ -42,7 +42,7 @@ public class JsonUserConfirmFilter<U extends UserAuthenticationDetails, R extend
         if (requestMatcher.matches(request)) {
             UserConfirmRequest userConfirmRequest = objectMapper.readValue(request.getInputStream(), UserConfirmRequest.class);
             UserRegistrationResult result = confirmTicket(userConfirmRequest);
-            if (result.getMessage() != UserRegistrationResultMessage.OK) {
+            if (result.getMessage() != UserRegistrationResultMessage.REGISTRATION_CONFIRMED) {
                 response.setStatus(HttpServletResponse.SC_CONFLICT);
             }
             objectMapper.writeValue(response.getOutputStream(), result);
@@ -52,9 +52,8 @@ public class JsonUserConfirmFilter<U extends UserAuthenticationDetails, R extend
     }
 
     private UserRegistrationResult confirmTicket(UserConfirmRequest userConfirmRequest) {
-        if (userAuthenticationDetailsService.confirmRegistrationTicket(userConfirmRequest.getTicketId())) {
-            return UserRegistrationResult.ok();
-        }
-        return UserRegistrationResult.invalidConfirmTicket();
+       return userAuthenticationDetailsService.confirmRegistrationTicket(userConfirmRequest.getTicketId())
+               .map(u -> UserRegistrationResult.registrationConfirmed(u.getUsername()))
+               .orElse(UserRegistrationResult.invalidConfirmTicket());
     }
 }
