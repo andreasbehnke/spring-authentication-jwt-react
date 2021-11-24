@@ -1,6 +1,5 @@
 package org.springext.security.jwt.filter;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springext.security.jwt.dto.UserRegistrationRequest;
 import org.springext.security.jwt.dto.UserRegistrationResult;
