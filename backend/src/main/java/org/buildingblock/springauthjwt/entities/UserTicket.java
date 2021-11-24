@@ -3,6 +3,7 @@ package org.buildingblock.springauthjwt.entities;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Entity
@@ -14,8 +15,11 @@ public class UserTicket {
     @Type(type = "pg-uuid")
     private UUID id;
 
-    @ManyToOne(optional = false)
-    private User user;
+    @NotNull
+    private String email;
+
+    @NotNull
+    private UserTicketType ticketType;
 
     public UUID getId() {
         return id;
@@ -25,11 +29,19 @@ public class UserTicket {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public UserTicketType getTicketType() {
+        return ticketType;
+    }
+
+    public void setTicketType(UserTicketType ticketType) {
+        this.ticketType = ticketType;
     }
 }

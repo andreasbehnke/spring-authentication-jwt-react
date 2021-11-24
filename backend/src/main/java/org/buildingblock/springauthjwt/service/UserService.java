@@ -2,6 +2,7 @@ package org.buildingblock.springauthjwt.service;
 
 import org.buildingblock.springauthjwt.entities.User;
 import org.buildingblock.springauthjwt.entities.UserTicket;
+import org.buildingblock.springauthjwt.entities.UserTicketType;
 import org.buildingblock.springauthjwt.model.UserAuthenticationDetailsImpl;
 import org.buildingblock.springauthjwt.model.UserRegistrationRequestImpl;
 import org.buildingblock.springauthjwt.service.repositories.UserRepository;
@@ -60,7 +61,8 @@ public class UserService implements UserAuthenticationDetailsService<UserAuthent
         user.setHashedPassword(encodedPassword);
         user = userRepository.save(user);
         UserTicket userTicket = new UserTicket();
-        userTicket.setUser(user);
+        userTicket.setEmail(userRegistrationRequest.getUsername());
+        userTicket.setTicketType(UserTicketType.confirmRegistration);
         userTicket = userTicketRepository.save(userTicket);
         return new ConfirmationTicketInfo(
                 userTicket.getId().toString(),
@@ -77,11 +79,30 @@ public class UserService implements UserAuthenticationDetailsService<UserAuthent
         }
         Optional<UserTicket> ticket = userTicketRepository.findById(id);
         if (ticket.isPresent()) {
-            User user = ticket.get().getUser();
-            user.setEnabled(true);
-            userRepository.save(user);
-            userTicketRepository.deleteById(id);
-            return Optional.of(new UserAuthenticationDetailsImpl(user));
+            String email = ticket.get().getEmail();
+            Optional<User> user = userRepository.findByEmail(email);
+            if (user.isPresent()) {
+                user.get().setEnabled(true);
+                userRepository.save(user.get());
+                userTicketRepository.deleteById(id);
+                return Optional.of(new UserAuthenticationDetailsImpl(user.get()));
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<ConfirmationTicketInfo> createForgotPasswordTicket(String username) {
+        Optional<User> user =  userRepository.findByEmail(username);
+        if (user.isPresent()) {
+            UserTicket userTicket = new UserTicket();
+            String email = user.get().getEmail();
+            userTicket.setEmail(email);
+            userTicket.setTicketType(UserTicketType.forgotPassword);
+            userTicket = userTicketRepository.save(userTicket);
+            return Optional.of(new ConfirmationTicketInfo(
+                    userTicket.getId().toString(),
+                    email));
         } else {
             return Optional.empty();
         }

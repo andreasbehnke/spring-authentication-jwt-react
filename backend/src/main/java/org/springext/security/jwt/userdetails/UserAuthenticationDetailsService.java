@@ -6,8 +6,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
 public interface UserAuthenticationDetailsService<U extends UserAuthenticationDetails, R extends UserRegistrationRequest> extends UserDetailsService {
@@ -29,5 +31,7 @@ public interface UserAuthenticationDetailsService<U extends UserAuthenticationDe
 
     ConfirmationTicketInfo registerNewUser(@Valid R userRegistrationRequest, String encodedPassword);
 
-    Optional<U> confirmRegistrationTicket(String ticketId);
+    Optional<U> confirmRegistrationTicket(@NotNull String ticketId);
+
+    Optional<ConfirmationTicketInfo> createForgotPasswordTicket(@NotNull String username);
 }

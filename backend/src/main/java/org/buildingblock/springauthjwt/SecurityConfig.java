@@ -5,10 +5,7 @@ import org.buildingblock.springauthjwt.model.UserAuthenticationDetailsImpl;
 import org.buildingblock.springauthjwt.model.UserRegistrationRequestImpl;
 import org.buildingblock.springauthjwt.service.UserService;
 import org.springext.security.jwt.authentication.JwtAuthenticationProvider;
-import org.springext.security.jwt.filter.JsonUserConfirmFilter;
-import org.springext.security.jwt.filter.JsonUserRegistrationFilter;
-import org.springext.security.jwt.filter.JsonUsernamePasswordAuthenticationFilter;
-import org.springext.security.jwt.filter.JwtTokenAuthenticationFilter;
+import org.springext.security.jwt.filter.*;
 import org.springext.security.jwt.service.JwtConfigurationProperties;
 import org.springext.security.jwt.service.JwtTokenService;
 import org.springext.security.jwt.userdetails.SimpleMailConfirmationTicketService;
@@ -143,6 +140,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 JsonUserRegistrationFilter.class
         );
 
+        // Add JSON password forgot filter
+        JsonCreateForgotPasswordTicketFilter jsonCreateForgotPasswordTicketFilter =
+                new JsonCreateForgotPasswordTicketFilter(
+                        new AntPathRequestMatcher("/public/forgotPassword"),
+                        objectMapper,
+                        userService,
+                        confirmationTicketService
+                );
+        http.addFilterAt(
+                jsonCreateForgotPasswordTicketFilter,
+                JsonUserConfirmFilter.class
+        );
+
         // Add JWT token filter
         JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter =
                 new JwtTokenAuthenticationFilter(
@@ -152,7 +162,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         jwtTokenAuthenticationFilter.setAutoRefreshToken(autoRefreshToken);
         http.addFilterAfter(
                 jwtTokenAuthenticationFilter,
-                JsonUserConfirmFilter.class
+                JsonCreateForgotPasswordTicketFilter.class
         );
     }
 }

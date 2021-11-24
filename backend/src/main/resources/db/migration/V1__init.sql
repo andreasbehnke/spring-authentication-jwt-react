@@ -10,8 +10,8 @@ CREATE TABLE "user" (
 
 CREATE TABLE "user_ticket" (
     id uuid not null,
-    user_id uuid not null,
+    email varchar not null,
+    ticket_type text not null,
 
-    constraint pk_user_ticket primary key (id),
-    constraint fk_user_ticket_user foreign key (user_id) references "user" (id)
+    constraint pk_user_ticket primary key (id)
 );
