@@ -71,10 +71,10 @@ public class JsonUserRegistrationFilter<U extends UserAuthenticationDetails, R e
                 || !userAuthenticationRequest.getPassword().equals(userAuthenticationRequest.getPassword2())) {
             return UserRegistrationResult.passwordDoNotMatch();
         }
-        if (userAuthenticationDetailsService.exists(userAuthenticationRequest)) {
-            return UserRegistrationResult.userExists();
-        }
         try {
+            if (userAuthenticationDetailsService.exists(userAuthenticationRequest)) {
+                return UserRegistrationResult.userExists();
+            }
             ConfirmationTicketInfo confirmationTicketInfo =
                     userAuthenticationDetailsService.registerNewUser(userAuthenticationRequest, passwordEncoder.encode(userAuthenticationRequest.getPassword()));
             confirmationTicketService.sendConfirmationTicket(confirmationTicketInfo);
