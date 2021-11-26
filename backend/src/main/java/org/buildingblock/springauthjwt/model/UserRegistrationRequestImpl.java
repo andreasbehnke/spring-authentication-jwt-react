@@ -2,11 +2,8 @@ package org.buildingblock.springauthjwt.model;
 
 import org.springext.security.jwt.dto.UserRegistrationRequest;
 
-import javax.validation.constraints.Email;
-
 public class UserRegistrationRequestImpl implements UserRegistrationRequest {
 
-    @Email
     private String username;
 
     private String password;

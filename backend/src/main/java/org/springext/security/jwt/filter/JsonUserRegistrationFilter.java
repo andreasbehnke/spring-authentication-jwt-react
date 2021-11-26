@@ -18,6 +18,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 
 public class JsonUserRegistrationFilter<U extends UserAuthenticationDetails, R extends UserRegistrationRequest> extends GenericFilterBean {
@@ -73,9 +74,13 @@ public class JsonUserRegistrationFilter<U extends UserAuthenticationDetails, R e
         if (userAuthenticationDetailsService.exists(userAuthenticationRequest)) {
             return UserRegistrationResult.userExists();
         }
-        ConfirmationTicketInfo confirmationTicketInfo =
-                userAuthenticationDetailsService.registerNewUser(userAuthenticationRequest, passwordEncoder.encode(userAuthenticationRequest.getPassword()));
-        confirmationTicketService.sendConfirmationTicket(confirmationTicketInfo);
+        try {
+            ConfirmationTicketInfo confirmationTicketInfo =
+                    userAuthenticationDetailsService.registerNewUser(userAuthenticationRequest, passwordEncoder.encode(userAuthenticationRequest.getPassword()));
+            confirmationTicketService.sendConfirmationTicket(confirmationTicketInfo);
+        } catch (ConstraintViolationException cve) {
+            return UserRegistrationResult.invalidRegistration();
+        }
         return UserRegistrationResult.ok();
     }
 }

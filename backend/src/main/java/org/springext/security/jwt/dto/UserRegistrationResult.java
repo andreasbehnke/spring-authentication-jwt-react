@@ -20,6 +20,10 @@ public class UserRegistrationResult {
         return new UserRegistrationResult(UserRegistrationResultMessage.PASSWORDS_DO_NOT_MATCH, true);
     }
 
+    public static UserRegistrationResult invalidRegistration() {
+        return new UserRegistrationResult(UserRegistrationResultMessage.INVALID_REGISTRATION, true);
+    }
+
     public static UserRegistrationResult invalidConfirmTicket() {
         return new UserRegistrationResult(UserRegistrationResultMessage.INVALID_CONFIRM_TICKET, true);
     }
