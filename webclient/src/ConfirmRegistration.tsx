@@ -1,9 +1,9 @@
 import {Redirect, useLocation} from "react-router-dom";
 import {useSnackbar} from "notistack";
 import axios, {AxiosResponse} from "axios";
-import UserConfirmRequest from "./UserConfirmRequest";
+import UserConfirmRequest from "./dto/UserConfirmRequest";
 import {useEffect} from "react";
-import UserRegistrationResult from "./UserRegistrationResult";
+import UserRegistrationResult from "./dto/UserRegistrationResult";
 import {useAsync} from "react-async-hook";
 import {CircularProgress} from "@material-ui/core";
 

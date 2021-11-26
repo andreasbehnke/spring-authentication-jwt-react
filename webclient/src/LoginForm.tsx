@@ -1,7 +1,7 @@
 import {Box, Button, Grid, Link, TextField, Typography} from "@material-ui/core";
 import React, {useState} from "react";
 import axios from "axios";
-import UserAuthenticationRequest from "./UserAuthenticationRequest";
+import UserAuthenticationRequest from "./dto/UserAuthenticationRequest";
 import {useSnackbar} from "notistack";
 import {useHistory, useLocation} from "react-router-dom";
 

@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import axios from "axios";
 import {useSnackbar} from "notistack";
 import {useHistory} from "react-router-dom";
-import UserForgotPasswordRequest from "./UserForgotPasswordRequest";
+import UserForgotPasswordRequest from "./dto/UserForgotPasswordRequest";
 
 export default function ForgotPasswordForm() {
 

@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import axios from "axios";
 import {useSnackbar} from "notistack";
 import {useHistory} from "react-router-dom";
-import UserRegistrationRequest from "./UserRegistrationRequest";
+import UserRegistrationRequest from "./dto/UserRegistrationRequest";
 
 export default function RegistrationForm() {
 
