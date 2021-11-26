@@ -10,7 +10,7 @@ import {ControlledTextField} from "./common/ControlledTextField";
 export default function RegistrationForm() {
 
     const methods = useForm({mode: "onBlur"});
-    const {handleSubmit} = methods;
+    const {handleSubmit, getValues} = methods;
 
     const {enqueueSnackbar} = useSnackbar();
 
@@ -44,10 +44,7 @@ export default function RegistrationForm() {
                                     value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
                                     message: "enter a valid e-mail address"
                                 },
-                                required: {
-                                    value: true,
-                                    message: "enter an e-mail address"
-                                }
+                                required: {value: true, message: "enter an e-mail address"}
                             }}
                         />
                     </Grid>
@@ -65,10 +62,12 @@ export default function RegistrationForm() {
                         <ControlledTextField
                             name={"password2"}
                             fullWidth
-                            label={"repeat Password"}
+                            label={"repeat password"}
                             type="password"
                             defaultValue={""}
-                            rules={{required: {value: true, message: "repeat Password"}}}
+                            rules={{
+                                validate: value => {return (getValues("password") !== value) ? "passwords do not match" : true},
+                                required: true}}
                         />
                     </Grid>
                     <Grid item container xs={12} justify={"flex-end"}>
