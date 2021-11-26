@@ -1,78 +1,85 @@
-import {Button, Grid, TextField, Typography} from "@material-ui/core";
-import React, {useState} from "react";
+import {Button, Grid, Typography} from "@material-ui/core";
+import React from "react";
 import axios from "axios";
 import {useSnackbar} from "notistack";
 import {useHistory} from "react-router-dom";
 import UserRegistrationRequest from "./dto/UserRegistrationRequest";
+import {FormProvider, useForm} from "react-hook-form";
+import {ControlledTextField} from "./common/ControlledTextField";
 
 export default function RegistrationForm() {
 
-    const [submitting, setSubmitting] = useState<boolean>(false);
+    const methods = useForm({mode: "onBlur"});
+    const {handleSubmit} = methods;
 
-    const [username, setUsername] = useState<string>("", );
-
-    const [password, setPassword] = useState<string>("", );
-
-    const [password2, setPassword2] = useState<string>("", );
-
-    const { enqueueSnackbar } = useSnackbar();
+    const {enqueueSnackbar} = useSnackbar();
 
     const history = useHistory();
 
-    const submitRegistration = async() => {
-        if (submitting) {
-            return;
-        }
-        setSubmitting(true);
-        await axios.post<UserRegistrationRequest>("/public/register", { password, password2, username } )
+    const onSubmit = (data: UserRegistrationRequest) => {
+        axios.post<UserRegistrationRequest>("/public/register", data)
             .then(() => {
                 history.push("/login");
-                enqueueSnackbar("Confirmation email has been send", { variant: "success" });
+                enqueueSnackbar("Confirmation email has been send", {variant: "success"});
             })
             .catch(({response}) => {
-                enqueueSnackbar( response.data.message, { variant: "error" });
+                enqueueSnackbar(response.data.message, {variant: "error"});
             })
-            .finally(() => setSubmitting(false));
     };
 
     return (
-        <Grid container spacing={2}>
-            <Grid item xs={12}><Typography variant={"h6"}>Registration</Typography></Grid>
-            <Grid item xs={12}>
-                <TextField
-                    fullWidth
-                    label={"E-Mail"}
-                    autoComplete={"email"}
-                    value={username}
-                    onChange={event => { setUsername(event.target.value) }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                    fullWidth
-                    label={"Password"}
-                    type="password"
-                    value={password}
-                    onChange={event => { setPassword(event.target.value) }}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                    fullWidth
-                    label={"repeat Password"}
-                    type="password"
-                    value={password2}
-                    onChange={event => { setPassword2(event.target.value) }}
-                />
-            </Grid>
-            <Grid item container xs={12} justify={"flex-end"}>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={submitRegistration}
-                    disabled={submitting}
-                >Register</Button>
-            </Grid>
-        </Grid>
+        <FormProvider {...methods}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}><Typography variant={"h6"}>Registration</Typography></Grid>
+                    <Grid item xs={12}>
+                        <ControlledTextField
+                            name={"email"}
+                            fullWidth
+                            label={"E-Mail"}
+                            autoComplete={"email"}
+                            defaultValue={""}
+                            rules={{
+                                pattern: {
+                                    value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                                    message: "enter a valid e-mail address"
+                                },
+                                required: {
+                                    value: true,
+                                    message: "enter an e-mail address"
+                                }
+                            }}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <ControlledTextField
+                            name={"password"}
+                            fullWidth
+                            label={"Password"}
+                            type="password"
+                            defaultValue={""}
+                            rules={{required: {value: true, message: "enter a password"}}}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <ControlledTextField
+                            name={"password2"}
+                            fullWidth
+                            label={"repeat Password"}
+                            type="password"
+                            defaultValue={""}
+                            rules={{required: {value: true, message: "repeat Password"}}}
+                        />
+                    </Grid>
+                    <Grid item container xs={12} justify={"flex-end"}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            type={"submit"}
+                        >Register</Button>
+                    </Grid>
+                </Grid>
+            </form>
+        </FormProvider>
     );
 }
