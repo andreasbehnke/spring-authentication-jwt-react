@@ -53,7 +53,7 @@ public class JsonUserRegistrationFilter<U extends UserAuthenticationDetails, R e
 
     private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        if (requestMatcher.matches(request)) {
+        if (requestMatcher.matches(request) && request.getMethod().equals("POST")) {
             R userAuthenticationRequest = objectMapper.readValue(request.getInputStream(), classOfUserRegistrationRequest);
             UserRegistrationResult result = registerNewUser(userAuthenticationRequest);
             if (result.getMessage() != UserRegistrationResultMessage.OK) {

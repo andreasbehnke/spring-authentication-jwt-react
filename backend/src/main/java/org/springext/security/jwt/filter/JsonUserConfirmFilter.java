@@ -39,7 +39,7 @@ public class JsonUserConfirmFilter<U extends UserAuthenticationDetails, R extend
 
     private void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        if (requestMatcher.matches(request)) {
+        if (requestMatcher.matches(request) && request.getMethod().equals("POST")) {
             UserConfirmRequest userConfirmRequest = objectMapper.readValue(request.getInputStream(), UserConfirmRequest.class);
             UserRegistrationResult result = confirmTicket(userConfirmRequest);
             if (result.getMessage() != UserRegistrationResultMessage.REGISTRATION_CONFIRMED) {
