@@ -1,4 +1,4 @@
-import {Box, Button, Grid, TextField, Typography} from "@material-ui/core";
+import {Box, Button, Grid, Link, TextField, Typography} from "@material-ui/core";
 import React, {useState} from "react";
 import axios from "axios";
 import UserAuthenticationRequest from "./UserAuthenticationRequest";
@@ -64,19 +64,24 @@ export default function LoginForm() {
                     onChange={event => { setPassword(event.target.value) }}
                 />
             </Grid>
-            <Grid item container xs={12} justify={"flex-end"}>
-                <Box mr={2}>
+            <Grid item container xs={12} justify={"space-between"}>
+                <Grid item xs={4}>
+                    <Link href={"/forgotPassword"} variant={"body2"}>forgot password</Link>
+                </Grid>
+                <Grid item container xs={8} justify={"flex-end"}>
+                    <Box mr={2}>
+                        <Button
+                            variant="contained"
+                            onClick={navigateToRegistration}
+                        >Register</Button>
+                    </Box>
                     <Button
                         variant="contained"
-                        onClick={navigateToRegistration}
-                    >Register</Button>
-                </Box>
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={submitLogin}
-                    disabled={submitting}
-                >Login</Button>
+                        color="primary"
+                        onClick={submitLogin}
+                        disabled={submitting}
+                    >Login</Button>
+                </Grid>
             </Grid>
         </Grid>
     );

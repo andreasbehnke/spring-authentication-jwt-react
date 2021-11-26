@@ -6,6 +6,7 @@ import HelloWorld from "./HelloWorld";
 import {Box, Grid, Paper} from "@material-ui/core";
 import RegistrationForm from "./RegistrationForm";
 import ConfirmRegistration from "./ConfirmRegistration";
+import ForgotPasswordForm from "./ForgotPasswordForm";
 
 export default function App() {
   return (
@@ -24,6 +25,9 @@ export default function App() {
                                   </Route>
                                   <Route path = "/login">
                                       <LoginForm />
+                                  </Route>
+                                  <Route path = "/forgotPassword">
+                                      <ForgotPasswordForm />
                                   </Route>
                                   <Route path = "/helloWorld">
                                       <HelloWorld />

@@ -49,7 +49,7 @@ public class JsonCreateForgotPasswordTicketFilter extends GenericFilterBean {
             throws IOException, ServletException {
         if (requestMatcher.matches(request) && request.getMethod().equals("POST")) {
             UserForgotPasswordRequest userForgotPasswordRequest = objectMapper.readValue(request.getInputStream(), UserForgotPasswordRequest.class);
-            Optional<ConfirmationTicketInfo> confirmationTicketInfo = userAuthenticationDetailsService.createForgotPasswordTicket(userForgotPasswordRequest.getEmail());
+            Optional<ConfirmationTicketInfo> confirmationTicketInfo = userAuthenticationDetailsService.createForgotPasswordTicket(userForgotPasswordRequest.getUsername());
             confirmationTicketInfo.ifPresent(confirmationTicketService::sendForgotPasswordTicket);
         } else {
             chain.doFilter(request, response);
