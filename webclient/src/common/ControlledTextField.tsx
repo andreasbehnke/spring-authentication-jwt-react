@@ -12,7 +12,6 @@ export const ControlledTextField = ({
                                         name,
                                         defaultValue,
                                         rules,
-                                        label,
                                         helperText,
                                         ...other
                                     }: ControlledTextFieldProps) => {
@@ -27,7 +26,6 @@ export const ControlledTextField = ({
                 let hasError = !!fieldState.error;
                 return (
                     <TextField
-                        label={label}
                         helperText={hasError ? fieldState.error?.message : helperText}
                         error={hasError}
                         {...Object.assign({}, field, other)}
