@@ -11,7 +11,7 @@ async function confirmTicket( ticketId: string ) : Promise<UserRegistrationResul
     try {
         const result = await axios.post<UserConfirmRequest, AxiosResponse<UserRegistrationResult>>("/public/register/confirm", {ticketId});
         return result.data;
-    } catch (error) {
+    } catch (error: any) {
         return error.response.data;
     }
 }
