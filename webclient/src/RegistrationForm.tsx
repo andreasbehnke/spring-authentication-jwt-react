@@ -62,7 +62,7 @@ export default function RegistrationForm() {
                         <ControlledTextField
                             name={"password2"}
                             fullWidth
-                            label={"repeat password"}
+                            label={"repeat Password"}
                             type="password"
                             defaultValue={""}
                             rules={{
