@@ -5,11 +5,11 @@ import {useSnackbar} from "notistack";
 import {useHistory} from "react-router-dom";
 import UserForgotPasswordRequest from "./dto/UserForgotPasswordRequest";
 import {FormProvider, useForm} from "react-hook-form";
-import {ControlledTextField} from "./common/ControlledTextField";
+import {EmailTextField} from "./common/EmailTextField";
 
 export default function ForgotPasswordForm() {
 
-    const methods = useForm({mode: "onBlur"});
+    const methods = useForm({mode: "onChange"});
     const {handleSubmit, formState: {isSubmitting, isValid}} = methods;
 
     const {enqueueSnackbar} = useSnackbar();
@@ -33,19 +33,7 @@ export default function ForgotPasswordForm() {
                 <Grid container spacing={2}>
                     <Grid item xs={12}><Typography variant={"h6"}>Forgot Password</Typography></Grid>
                     <Grid item xs={12}>
-                        <ControlledTextField
-                            name={"username"}
-                            fullWidth
-                            label={"E-Mail"}
-                            autoComplete={"email"}
-                            rules={{
-                                pattern: {
-                                    value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-                                    message: "enter a valid e-mail address"
-                                },
-                                required: {value: true, message: "enter an e-mail address"}
-                            }}
-                        />
+                        <EmailTextField/>
                     </Grid>
                     <Grid item container xs={12} justify={"flex-end"}>
                         <Button

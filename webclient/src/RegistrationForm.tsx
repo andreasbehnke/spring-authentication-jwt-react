@@ -6,6 +6,8 @@ import {useHistory} from "react-router-dom";
 import UserRegistrationRequest from "./dto/UserRegistrationRequest";
 import {FormProvider, useForm} from "react-hook-form";
 import {ControlledTextField} from "./common/ControlledTextField";
+import {PasswordTextField} from "./common/PasswordTextField";
+import {EmailTextField} from "./common/EmailTextField";
 
 export default function RegistrationForm() {
 
@@ -33,30 +35,10 @@ export default function RegistrationForm() {
                 <Grid container spacing={2}>
                     <Grid item xs={12}><Typography variant={"h6"}>Registration</Typography></Grid>
                     <Grid item xs={12}>
-                        <ControlledTextField
-                            name={"username"}
-                            fullWidth
-                            label={"E-Mail"}
-                            autoComplete={"email"}
-                            defaultValue={""}
-                            rules={{
-                                pattern: {
-                                    value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-                                    message: "enter a valid e-mail address"
-                                },
-                                required: {value: true, message: "enter an e-mail address"}
-                            }}
-                        />
+                        <EmailTextField/>
                     </Grid>
                     <Grid item xs={12}>
-                        <ControlledTextField
-                            name={"password"}
-                            fullWidth
-                            label={"Password"}
-                            type="password"
-                            defaultValue={""}
-                            rules={{required: {value: true, message: "enter a password"}}}
-                        />
+                        <PasswordTextField/>
                     </Grid>
                     <Grid item xs={12}>
                         <ControlledTextField
@@ -66,8 +48,11 @@ export default function RegistrationForm() {
                             type="password"
                             defaultValue={""}
                             rules={{
-                                validate: value => {return (getValues("password") !== value) ? "passwords do not match" : true},
-                                required: true}}
+                                validate: value => {
+                                    return (getValues("password") !== value) ? "passwords do not match" : true
+                                },
+                                required: true
+                            }}
                         />
                     </Grid>
                     <Grid item container xs={12} justify={"flex-end"}>
