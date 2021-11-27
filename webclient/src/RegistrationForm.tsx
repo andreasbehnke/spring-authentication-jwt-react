@@ -10,14 +10,14 @@ import {ControlledTextField} from "./common/ControlledTextField";
 export default function RegistrationForm() {
 
     const methods = useForm({mode: "onBlur"});
-    const {handleSubmit, getValues} = methods;
+    const {handleSubmit, getValues, formState: {isSubmitting, isValid}} = methods;
 
     const {enqueueSnackbar} = useSnackbar();
 
     const history = useHistory();
 
     const onSubmit = (data: UserRegistrationRequest) => {
-        axios.post<UserRegistrationRequest>("/public/register", data)
+        return axios.post<UserRegistrationRequest>("/public/register", data)
             .then(() => {
                 history.push("/login");
                 enqueueSnackbar("Confirmation email has been send", {variant: "success"});
@@ -75,6 +75,7 @@ export default function RegistrationForm() {
                             variant="contained"
                             color="primary"
                             type={"submit"}
+                            disabled={isSubmitting || !isValid}
                         >Register</Button>
                     </Grid>
                 </Grid>
