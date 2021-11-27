@@ -34,7 +34,7 @@ export default function RegistrationForm() {
                     <Grid item xs={12}><Typography variant={"h6"}>Registration</Typography></Grid>
                     <Grid item xs={12}>
                         <ControlledTextField
-                            name={"email"}
+                            name={"username"}
                             fullWidth
                             label={"E-Mail"}
                             autoComplete={"email"}
