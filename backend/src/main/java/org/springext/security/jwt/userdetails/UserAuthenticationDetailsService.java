@@ -1,6 +1,7 @@
 package org.springext.security.jwt.userdetails;
 
 import org.springext.security.jwt.dto.UserRegistrationRequest;
+import org.springext.security.jwt.dto.UserResetPasswordRequest;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Optional;
 
+@Validated
 public interface UserAuthenticationDetailsService<U extends UserAuthenticationDetails, R extends UserRegistrationRequest> extends UserDetailsService {
 
     U loadUserByUsername(String username) throws UsernameNotFoundException;
@@ -34,4 +36,6 @@ public interface UserAuthenticationDetailsService<U extends UserAuthenticationDe
     Optional<U> confirmRegistrationTicket(@NotNull String ticketId);
 
     Optional<ConfirmationTicketInfo> createForgotPasswordTicket(@NotNull String username);
+
+    boolean resetPassword(@NotNull String ticketId, @NotNull String encodedPassword);
 }

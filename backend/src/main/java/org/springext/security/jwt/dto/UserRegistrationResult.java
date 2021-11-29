@@ -32,6 +32,14 @@ public class UserRegistrationResult {
         return new UserRegistrationResult(UserRegistrationResultMessage.REGISTRATION_CONFIRMED, false, userName);
     }
 
+    public static UserRegistrationResult invalidPasswordResetTicket() {
+        return new UserRegistrationResult(UserRegistrationResultMessage.INVALID_PASSWORD_RESET_TICKET, true);
+    }
+
+    public static UserRegistrationResult invalidPasswordReset() {
+        return new UserRegistrationResult(UserRegistrationResultMessage.INVALID_PASSWORD_RESET, true);
+    }
+
     private UserRegistrationResult(UserRegistrationResultMessage message, boolean isError) {
         this.message = message;
         this.isError = isError;

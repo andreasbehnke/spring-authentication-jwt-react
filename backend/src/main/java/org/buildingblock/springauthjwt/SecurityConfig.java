@@ -153,6 +153,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 JsonUserConfirmFilter.class
         );
 
+        // Add JSON password reset filter
+        JsonUserResetPasswordFilter jsonUserResetPasswordFilter =
+                new JsonUserResetPasswordFilter(
+                        new AntPathRequestMatcher("/public/resetPassword"),
+                        objectMapper,
+                        passwordEncoder(),
+                        userService
+                );
+        http.addFilterAt(
+                jsonUserResetPasswordFilter,
+                JsonCreateForgotPasswordTicketFilter.class
+        );
+
         // Add JWT token filter
         JwtTokenAuthenticationFilter jwtTokenAuthenticationFilter =
                 new JwtTokenAuthenticationFilter(
@@ -162,7 +175,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         jwtTokenAuthenticationFilter.setAutoRefreshToken(autoRefreshToken);
         http.addFilterAfter(
                 jwtTokenAuthenticationFilter,
-                JsonCreateForgotPasswordTicketFilter.class
+                JsonUserResetPasswordFilter.class
         );
     }
 }

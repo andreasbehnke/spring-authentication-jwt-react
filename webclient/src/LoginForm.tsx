@@ -50,7 +50,7 @@ export default function LoginForm() {
                     </Grid>
                     <Grid item container xs={12} justify={"space-between"}>
                         <Grid item xs={4}>
-                            <Link href={"/forgotPassword"} variant={"body2"}>forgot password</Link>
+                            <Link href={"/register/forgotPassword"} variant={"body2"}>forgot password</Link>
                         </Grid>
                         <Grid item container xs={8} justify={"flex-end"}>
                             <Box mr={2}>

@@ -20,7 +20,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@Validated
 public class UserService implements UserAuthenticationDetailsService<UserAuthenticationDetailsImpl, UserRegistrationRequestImpl> {
 
     private final UserRepository userRepository;
@@ -106,5 +105,27 @@ public class UserService implements UserAuthenticationDetailsService<UserAuthent
         } else {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public boolean resetPassword(String ticketId, String encodedPassword) {
+        UUID id;
+        try {
+            id = UUID.fromString(ticketId);
+        } catch (IllegalArgumentException iae) {
+            return false;
+        }
+        Optional<UserTicket> ticket = userTicketRepository.findById(id);
+        if (ticket.isPresent()) {
+            String email = ticket.get().getEmail();
+            Optional<User> user = userRepository.findByEmail(email);
+            if (user.isPresent()) {
+                user.get().setHashedPassword(encodedPassword);
+                userRepository.save(user.get());
+                userTicketRepository.deleteById(id);
+                return true;
+            }
+        }
+        return false;
     }
 }
