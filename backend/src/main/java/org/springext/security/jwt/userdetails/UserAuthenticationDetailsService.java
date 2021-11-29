@@ -1,7 +1,6 @@
 package org.springext.security.jwt.userdetails;
 
 import org.springext.security.jwt.dto.UserRegistrationRequest;
-import org.springext.security.jwt.dto.UserResetPasswordRequest;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

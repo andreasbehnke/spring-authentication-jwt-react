@@ -7,15 +7,12 @@ import org.buildingblock.springauthjwt.model.UserAuthenticationDetailsImpl;
 import org.buildingblock.springauthjwt.model.UserRegistrationRequestImpl;
 import org.buildingblock.springauthjwt.service.repositories.UserRepository;
 import org.buildingblock.springauthjwt.service.repositories.UserTicketRepository;
-import org.springext.security.jwt.dto.UserRegistrationRequest;
 import org.springext.security.jwt.userdetails.ConfirmationTicketInfo;
 import org.springext.security.jwt.userdetails.UserAuthenticationDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import java.util.Optional;
 import java.util.UUID;
 

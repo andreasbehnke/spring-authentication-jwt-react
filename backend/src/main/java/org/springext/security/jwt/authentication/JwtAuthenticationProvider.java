@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtAuthenticationProvider extends AbstractUserDetailsAuthenticationProvider {
 
-    private final UserAuthenticationDetailsService detailsService;
+    private final UserAuthenticationDetailsService<?,?> detailsService;
 
-    public JwtAuthenticationProvider(UserAuthenticationDetailsService detailsService) {
+    public JwtAuthenticationProvider(UserAuthenticationDetailsService<?,?> detailsService) {
         this.detailsService = detailsService;
     }
 

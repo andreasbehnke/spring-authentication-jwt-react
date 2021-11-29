@@ -29,7 +29,7 @@ public class UserRegistrationResult {
     }
 
     public static UserRegistrationResult registrationConfirmed(String userName) {
-        return new UserRegistrationResult(UserRegistrationResultMessage.REGISTRATION_CONFIRMED, false, userName);
+        return new UserRegistrationResult(userName);
     }
 
     public static UserRegistrationResult invalidPasswordResetTicket() {
@@ -45,10 +45,10 @@ public class UserRegistrationResult {
         this.isError = isError;
     }
 
-    private UserRegistrationResult(UserRegistrationResultMessage message, boolean isError, String userName) {
+    private UserRegistrationResult(String userName) {
         this.userName = userName;
-        this.message = message;
-        this.isError = isError;
+        this.message = UserRegistrationResultMessage.REGISTRATION_CONFIRMED;
+        this.isError = false;
     }
 
     public UserRegistrationResultMessage getMessage() {

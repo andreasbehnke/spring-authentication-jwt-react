@@ -1,13 +1,9 @@
 package org.springext.security.jwt.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springext.security.jwt.dto.UserRegistrationRequest;
 import org.springext.security.jwt.dto.UserRegistrationResult;
 import org.springext.security.jwt.dto.UserRegistrationResultMessage;
 import org.springext.security.jwt.dto.UserResetPasswordRequest;
-import org.springext.security.jwt.userdetails.ConfirmationTicketInfo;
-import org.springext.security.jwt.userdetails.ConfirmationTicketService;
-import org.springext.security.jwt.userdetails.UserAuthenticationDetails;
 import org.springext.security.jwt.userdetails.UserAuthenticationDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.RequestMatcher;

@@ -5,7 +5,7 @@ Fork or copy this code for your own web application.
 
 The goal of this repository is to
 
-* use the latest and up to date libraries for JWT token generation
+* use the latest and up-to-date libraries for JWT token generation
 * write as little code as possible to accomplish the task
 * use 100% of the security API provided by spring instead of writing own code
 
@@ -47,7 +47,7 @@ Start backend app:
 
 * ```./mvnw spring-boot:run```
 
-## Web Frontend Techonoly Stack
+## Web Frontend Technology Stack
 
 * React
 * Typescript
